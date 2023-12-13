@@ -4,6 +4,7 @@ from .nyu import NYUv2
 from .cityscape import CustomCityScapeDS
 from .celeb import CustomCeleb
 from .ox import CustomOxFordPet
+from .cifar import ImbalanceCIFAR10, ImbalanceCIFAR100
 
 from torch.utils.data import Dataset, DataLoader, random_split, ConcatDataset
 
@@ -103,6 +104,41 @@ def get_ds_city(args):
 
     return (train_ds, valid_ds, test_ds, train_dl, valid_dl, test_dl), args
 
+def get_ds_cifar(args):
+    if args.ds == 'cifar10':
+        data_interface = ImbalanceCIFAR10
+    elif args.ds == 'cifar100':
+        data_interface = ImbalanceCIFAR100
+
+    train_ds = data_interface(
+        root="/".join(__file__.split("/")[:-1]) + "/source",
+        imb_type=args.imb_type,
+        imb_factor=args.imb_factor,
+        train=True
+    )
+
+    valid_ds = data_interface(
+        root="/".join(__file__.split("/")[:-1]) + "/source",
+        imb_type=args.imb_type,
+        imb_factor=args.imb_factor,
+        train=False
+    )
+
+    test_ds = valid_ds
+
+    train_dl = DataLoader(train_ds, batch_size=args.bs, shuffle=True, pin_memory=args.pinmem, num_workers=args.wk)
+    valid_dl = DataLoader(valid_ds, batch_size=args.bs, shuffle=True, pin_memory=args.pinmem, num_workers=args.wk)
+    test_dl = DataLoader(test_ds, batch_size=args.bs, shuffle=True, pin_memory=args.pinmem, num_workers=args.wk)
+
+    args.num_train_sample = len(train_ds)
+    args.num_valid_sample = len(valid_ds)
+    args.num_test_sample = len(test_ds)
+    args.num_train_batch = len(train_dl)
+    args.num_valid_batch = len(valid_dl)
+    args.num_test_batch = len(test_dl)
+
+    return (train_ds, valid_ds, test_ds, train_dl, valid_dl, test_dl), args
+
 
 def get_ds(args):
 
@@ -110,7 +146,9 @@ def get_ds(args):
         "oxford" : get_ds_ox,
         "nyu" : get_ds_nyu,
         "celeb" : get_ds_celeb,
-        "city" : get_ds_city
+        "city" : get_ds_city,
+        "cifar10" : get_ds_cifar,
+        "cifar100" : get_ds_cifar
     }
 
     data, args = ds_mapping[args.ds](args)
