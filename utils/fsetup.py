@@ -7,15 +7,19 @@ def folder_setup(args):
     if not os.path.exists(run_dir):
         os.mkdir(run_dir)
     
-    setting_dir = run_dir + f"/{args.ds}_{args.loss}"
-    if not os.path.exists(setting_dir):
-        os.mkdir(setting_dir)
+    task_dir = run_dir + f"/{args.ds}_{args.task}"
+    if not os.path.exists(task_dir):
+        os.mkdir(task_dir)
     
-    exp_cnt = len(os.listdir(setting_dir))
+    loss_dir = task_dir + f"/{args.loss}"
+    if not os.path.exists(loss_dir):
+        os.mkdir(loss_dir)
+    
+    exp_cnt = len(os.listdir(loss_dir))
     if exp_cnt == 0:
-        exp_dir = setting_dir + f"/exp_{exp_cnt}"
+        exp_dir = loss_dir + f"/exp_{exp_cnt}"
     else:
-        old_exp_dir = setting_dir + f"/exp_{exp_cnt-1}"
+        old_exp_dir = loss_dir + f"/exp_{exp_cnt-1}"
         if len(os.listdir(old_exp_dir)) > 0:
             cfg_path = old_exp_dir + "/config.json"
             if not os.path.exists(cfg_path):
@@ -28,7 +32,7 @@ def folder_setup(args):
                     shutil.rmtree(old_exp_dir)
                     exp_dir = old_exp_dir
                 else:
-                    exp_dir = setting_dir + f"/exp_{exp_cnt}"
+                    exp_dir = loss_dir + f"/exp_{exp_cnt}"
         else:
             exp_dir = old_exp_dir
     
