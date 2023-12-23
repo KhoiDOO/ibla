@@ -1,4 +1,5 @@
 from .unet import Unet
+import torchvision
 
 model_mapping = {
     "city" : {
@@ -12,6 +13,12 @@ model_mapping = {
     },
     "oxford" : {
         "semantic" : Unet,
+    },
+    "cifar10" : {
+        "clf" : torchvision.models.efficientnet_b0(num_class = 10)
+    },
+    "cifar100" : {
+        "clf" : torchvision.models.efficientnet_b0(num_class = 100)
     }
 }
 
