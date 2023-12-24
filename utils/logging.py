@@ -9,7 +9,6 @@ class Logging:
     def __init__(self, args):
         self.__log = {}
         self.__epoch = 0
-        self.__step = 0
 
         if args.wandb:
             args.run_name = f"{args.ds}_{args.task}_{args.loss}_{args.model}__{int(time.time())}"
@@ -52,14 +51,13 @@ class Logging:
     def reset(self):
         self.__reset_epoch()
         self.__epoch = 0
-        self.__step = 0
     
     def step(self, epoch):
         self.__epoch = epoch
         
         self.__log_avg = {}
         for log_key in self.__log:
-            if log_key.split("_")[-1] in ['loss', 'depth_abs_error', 'depth_rel_error', 'iou']:
+            if log_key.split("/")[-1] in ['loss', 'depth_abs_error', 'depth_rel_error', 'iou']:
                 if 'train' in log_key:
                     self.__log_avg[log_key] = self.__log[log_key] / self.__args.num_train_batch
                 elif 'valid' in log_key:
