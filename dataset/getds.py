@@ -25,8 +25,6 @@ def get_ds_ox(args):
     test_dl = DataLoader(test_ds, batch_size=args.bs, shuffle=True, pin_memory=args.pinmem, num_workers=args.wk)
 
     args.seg_n_classes = 3
-    args.cls_n_classes = 37
-    args.task_num = 3
 
     args.num_train_sample = len(train_ds)
     args.num_valid_sample = len(valid_ds)
@@ -46,7 +44,7 @@ def get_ds_nyu(args):
     valid_dl = DataLoader(valid_ds, batch_size=args.bs, shuffle=True, pin_memory=args.pinmem, num_workers=args.wk)
     test_dl = DataLoader(test_ds, batch_size=args.bs, shuffle=True, pin_memory=args.pinmem, num_workers=args.wk)
 
-    args.task_num = len(list(train_ds[0][1].keys()))
+    args.seg_n_classes = 3
 
     args.num_train_sample = len(train_ds)
     args.num_valid_sample = len(valid_ds)
@@ -65,8 +63,6 @@ def get_ds_celeb(args):
     train_dl = DataLoader(train_ds, batch_size=args.bs, shuffle=True, pin_memory=args.pinmem, num_workers=args.wk)
     valid_dl = DataLoader(valid_ds, batch_size=args.bs, shuffle=True, pin_memory=args.pinmem, num_workers=args.wk)
     test_dl = DataLoader(test_ds, batch_size=args.bs, shuffle=True, pin_memory=args.pinmem, num_workers=args.wk)
-
-    args.task_num = len(list(train_ds[0][1].keys()))
 
     args.num_train_sample = len(train_ds)
     args.num_valid_sample = len(valid_ds)
@@ -93,7 +89,7 @@ def get_ds_city(args):
     valid_dl = DataLoader(valid_ds, batch_size=args.bs, shuffle=True, pin_memory=args.pinmem, num_workers=args.wk)
     test_dl = DataLoader(test_ds, batch_size=args.bs, shuffle=True, pin_memory=args.pinmem, num_workers=args.wk)
 
-    args.task_num = len(list(train_ds[0][1].keys()))
+    args.seg_n_classes = 3
 
     args.num_train_sample = len(train_ds)
     args.num_valid_sample = len(valid_ds)
@@ -107,20 +103,20 @@ def get_ds_city(args):
 def get_ds_cifar(args):
     if args.ds == 'cifar10':
         data_interface = ImbalanceCIFAR10
+        args.n_classes = 10
     elif args.ds == 'cifar100':
         data_interface = ImbalanceCIFAR100
+        args.n_classes = 100
 
     train_ds = data_interface(
         root="/".join(__file__.split("/")[:-1]) + "/source",
-        imb_type=args.imb_type,
-        imb_factor=args.imb_factor,
+        args=args,
         train=True
     )
 
     valid_ds = data_interface(
         root="/".join(__file__.split("/")[:-1]) + "/source",
-        imb_type=args.imb_type,
-        imb_factor=args.imb_factor,
+        args=args,
         train=False
     )
 
