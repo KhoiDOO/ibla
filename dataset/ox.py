@@ -2,7 +2,7 @@ import os, sys
 from typing import *
 import cv2
 from PIL import Image
-from tqdm import tqdm
+from rich.progress import track
 import numpy as np
 import argparse
 
@@ -51,14 +51,14 @@ class CustomOxFordPet(Dataset):
         image_ids = []
         self._labels = []
         with open(self._anns_folder + f"/{self._split}.txt") as file:
-            for line in tqdm(file):
+            for line in track(file):
                 image_id, label, *_ = line.strip().split()
                 image_ids.append(image_id)
                 self._labels.append(int(label) - 1)
 
         self.classes = [
             " ".join(part.title() for part in raw_cls.split("_"))
-            for raw_cls, _ in tqdm(
+            for raw_cls, _ in track(
                     sorted(
                     {(image_id.rsplit("_", 1)[0], label) for image_id, label in zip(image_ids, self._labels)},
                     key=lambda image_id_and_label: image_id_and_label[1],
@@ -67,8 +67,8 @@ class CustomOxFordPet(Dataset):
         ]
         self.class_to_idx = dict(zip(self.classes, range(len(self.classes))))
 
-        self._images = [self._images_folder + f"/{image_id}.jpg" for image_id in tqdm(image_ids)]
-        self._segs = [self._segs_folder + f"/{image_id}.png" for image_id in tqdm(image_ids)]
+        self._images = [self._images_folder + f"/{image_id}.jpg" for image_id in track(image_ids)]
+        self._segs = [self._segs_folder + f"/{image_id}.png" for image_id in track(image_ids)]
         print("Done")
 
     @staticmethod

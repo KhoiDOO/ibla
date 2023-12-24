@@ -3,6 +3,7 @@ import torchvision.transforms as transforms
 import os
 import pickle
 import numpy as np
+from rich.progress import track
 
 transform = transforms.Compose(
     transforms.ToTensor(),
@@ -13,22 +14,29 @@ transform = transforms.Compose(
 class ImbalanceCIFAR10(torchvision.datasets.CIFAR10):
     cls_num = 10
 
-    def __init__(self, root, imb_type='exp', imb_factor=0.01, rand_number=0, train=True,
+    def __init__(self, root, args, train=True,
                  transform=transform, target_transform=None, download=True):
         super(ImbalanceCIFAR10, self).__init__(root, train, transform, target_transform, download)
-        np.random.seed(rand_number)
-        img_num_list = self.get_img_num_per_cls(self.cls_num, imb_type, imb_factor)
+        np.random.seed(args.rand_number)
+        
+        self.args = args
+        self.imb_type = self.args.imb_type
+        self.imb_factor = self.args.imb_factor
+        
+        print("Data Set Setting Up")
+        img_num_list = self.get_img_num_per_cls(self.cls_num, self.imb_type, self.imb_factor)
         self.gen_imbalanced_data(img_num_list)
+        print("Done")
 
     def get_img_num_per_cls(self, cls_num, imb_type, imb_factor):
         img_max = len(self.data) / cls_num
         img_num_per_cls = []
         if imb_type == 'exp':
-            for cls_idx in range(cls_num):
+            for cls_idx in track(range(cls_num)):
                 num = img_max * (imb_factor**(cls_idx / (cls_num - 1.0)))
                 img_num_per_cls.append(int(num))
         elif imb_type == 'step':
-            for cls_idx in range(cls_num // 2):
+            for cls_idx in track(range(cls_num // 2)):
                 img_num_per_cls.append(int(img_max))
             for cls_idx in range(cls_num // 2):
                 img_num_per_cls.append(int(img_max * imb_factor))
@@ -41,9 +49,8 @@ class ImbalanceCIFAR10(torchvision.datasets.CIFAR10):
         new_targets = []
         targets_np = np.array(self.targets, dtype=np.int64)
         classes = np.unique(targets_np)
-        # np.random.shuffle(classes)
         self.num_per_cls_dict = dict()
-        for the_class, the_img_num in zip(classes, img_num_per_cls):
+        for the_class, the_img_num in track(zip(classes, img_num_per_cls)):
             self.num_per_cls_dict[the_class] = the_img_num
             idx = np.where(targets_np == the_class)[0]
             np.random.shuffle(idx)

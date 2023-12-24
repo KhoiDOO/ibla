@@ -2,7 +2,7 @@ import os, sys
 from typing import *
 import cv2
 from PIL import Image
-from tqdm import tqdm
+from rich.progress import track
 import argparse
 import numpy as np
 
@@ -98,7 +98,7 @@ class CustomCityScapeDS(Dataset):
                 print(f"The dataset source is not available or not extracted at {self.root}")
 
         print("Data Set Setting Up")
-        for city in tqdm(os.listdir(self.img_dir)):
+        for city in track(os.listdir(self.img_dir)):
             img_dir = os.path.join(self.img_dir, city)
             semantic_target_dir = os.path.join(self.semantic_dir, city)
             depth_target_dir = os.path.join(self.depth_dir, city)

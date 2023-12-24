@@ -2,7 +2,7 @@ import os, sys
 from typing import *
 import cv2
 from PIL import Image
-from tqdm import tqdm
+from rich.progress import track
 from glob import glob
 import numpy as np
 import argparse
