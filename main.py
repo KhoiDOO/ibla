@@ -3,11 +3,12 @@ import argparse
 from typing import *
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(prog='MTLA')
+    parser = argparse.ArgumentParser(prog='IBLA')
 
     # DATASET
     parser.add_argument('--ds', type=str, required=True, choices = [
-        'oxford', 'nyu', 'celeb', 'city', 'cifar10', 'cifar100'],
+        'oxford', 'nyu', 'celeb', 'city', 'cifar10', 'cifar100'
+        ],
         help='dataset used in training')
     parser.add_argument('--bs', type=int, required=True, default=64,
         help='batch size used for data set')
@@ -18,12 +19,25 @@ if __name__ == "__main__":
     parser.add_argument('--citi_mode', type=str, default='fine',  choices=['fine', 'coarse'],
         help='mode used for cityscape dataset')
     
+    # DATASET - CIFAR10/100
+    parser.add_argument('--imb_type', type=str, default='exp', choices=['exp', 'step'],
+        help='type of imbalance')
+    parser.add_argument('--imb_factor', type=str, default='exp', choices=['exp', 'step'],
+        help='type of imbalance')
+    parser.add_argument('--rand_number', type=int, default=0,
+        help='seed random number')
+    
     # TRAINING GENERAL SETTINGS
     parser.add_argument('--idx', type=int, default=0,
         help='device index used in training')
+    parser.add_argument('--model', type=str, default='unet', choices=['unet', 'renet18'],
+        help='backbone used in training')
     parser.add_argument('--loss', type=str, default='vanilla', 
         choices=['vanilla'],
-        help='mtl method used in training')
+        help='loss function used in training')
+    parser.add_argument('--task', type=str, default='clf', required=True,
+        choices=['clf', 'seg', 'depth'],
+        help='training task')
     parser.add_argument('--epochs', type=int, default=100,
         help='number of epochs used in training')
     parser.add_argument('--test', action='store_true',
