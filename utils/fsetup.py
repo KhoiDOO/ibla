@@ -11,7 +11,7 @@ def folder_setup(args):
     if not os.path.exists(task_dir):
         os.mkdir(task_dir)
     
-    loss_dir = task_dir + f"/{args.loss}"
+    loss_dir = task_dir + f"/{args.loss}_{args.model}"
     if not os.path.exists(loss_dir):
         os.mkdir(loss_dir)
     
