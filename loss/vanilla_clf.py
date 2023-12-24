@@ -15,7 +15,7 @@ class VanillaClassifierV0(nn.Module):
             'log' : torch.log
         }
 
-    def forward(self, pred, target):
+    def forward(self, pred, target) -> torch.Tensor:
 
         pred_soft = self.act(pred)
 
@@ -32,7 +32,7 @@ class VanillaClassifierV1(VanillaClassifierV0):
     def __init__(self, args) -> None:
         super().__init__(args=args)
     
-    def forward(self, pred, target):
+    def forward(self, pred, target) -> torch.Tensor:
 
         cls_loss = {}
 
@@ -58,7 +58,7 @@ class VanillaClassifierV2(VanillaClassifierV0):
     def __init__(self, args) -> None:
         super().__init__(args=args)
     
-    def forward(self, pred, target):
+    def forward(self, pred, target) -> torch.Tensor:
 
         cls_loss = {}
 
