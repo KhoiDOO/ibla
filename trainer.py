@@ -130,4 +130,67 @@ def train_func(args):
         save_path = args.exp_dir + f"/last.pt"
         torch.save(save_dict, save_path)
     
+    
+    log_interface.reset()
+    if args.verbose:
+        print("Validating")
+    test_prog = track(enumerate(test_dl)) if args.verbose else enumerate(test_dl)
+    model.eval()
+    with torch.no_grad():
+        for batch, (img, target) in test_prog:
+            img = img.to(device)
+            target = target.to(device)
+
+            pred = model(img)
+            loss = loss_fn(pred, target)
+
+            log_interface(key="test/loss", value=loss.item())
+
+            for metric_key in metric_dict:
+                metric_value = metric_dict[metric_key](pred, target)
+                log_interface(key=f"test/{metric_key}", value=metric_value)
+
+    # finalization
+    for idx in range(10):
+        img, target = test_ds[idx]
+        img = img.unsqueeze(0).to(device)
         
+        pred = model(img)
+        
+        if args.task == "semantic":
+            perform_dir = args.exp_dir + f"/{args.task}"
+            if not os.path.exists(perform_dir):
+                os.mkdir(perform_dir)
+            pred_task_np = torch.argmax(pred[0], dim=0).cpu().unsqueeze(0).permute(1, -1, 0).numpy()
+            lble_task_np = torch.argmax(target, dim=0).cpu().unsqueeze(0).permute(1, -1, 0).numpy()
+
+            pred_path = perform_dir + f"/pred_{idx}.pdf"
+            lble_path = perform_dir + f"/lble_{idx}.pdf"                
+
+            for _img, _path in zip([pred_task_np, lble_task_np], [pred_path, lble_path]):
+                plt.figure()
+
+                plt.imshow(_img)
+                plt.axis('off')
+                plt.savefig(_path, format='pdf', dpi=300)
+
+                plt.close()
+
+        img_dir = args.exp_dir + f"/img"
+        if not os.path.exists(img_dir):
+            os.mkdir(img_dir)
+        
+        if args.ds == 'oxford':
+            img_np = invnorm(img[0]).cpu().permute(1, -1, 0).numpy()
+            
+        path = img_dir + f"/{idx}.pdf"
+        plt.figure()
+
+        plt.imshow(img_np)
+        plt.axis('off')
+        plt.savefig(path, format='pdf', dpi=300, pad_inches=0)
+
+        plt.close()
+    
+    if args.verbose:
+        print("Ending")
