@@ -36,7 +36,7 @@ if __name__ == "__main__":
         choices=['vanilla'],
         help='loss function used in training')
     parser.add_argument('--task', type=str, default='clf', required=True,
-        choices=['clf', 'seg', 'depth'],
+        choices=['clf', 'seg'],
         help='training task')
     parser.add_argument('--epochs', type=int, default=100,
         help='number of epochs used in training')
