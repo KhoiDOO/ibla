@@ -22,15 +22,15 @@ if __name__ == "__main__":
     # DATASET - CIFAR10/100
     parser.add_argument('--imb_type', type=str, default='exp', choices=['exp', 'step'],
         help='type of imbalance')
-    parser.add_argument('--imb_factor', type=str, default='exp', choices=['exp', 'step'],
-        help='type of imbalance')
+    parser.add_argument('--imb_factor', type=float, default=0.01,
+        help='imbalance factor')
     parser.add_argument('--rand_number', type=int, default=0,
         help='seed random number')
     
     # TRAINING GENERAL SETTINGS
     parser.add_argument('--idx', type=int, default=0,
         help='device index used in training')
-    parser.add_argument('--model', type=str, default='unet', choices=['unet', 'renet18'],
+    parser.add_argument('--model', type=str, default='unet', choices=['unet', 'resnet18'],
         help='backbone used in training')
     parser.add_argument('--loss', type=str, default='vanilla', 
         choices=['vanilla'],
@@ -60,6 +60,9 @@ if __name__ == "__main__":
         help='number of kernel in the first')
     parser.add_argument('--lr', type=float, default=0.001,
         help='learning rate')
+    
+    # VANILLA LOSS
+    parser.add_argument('--log_type', type=str, default='log2', choices=['log2', 'log10', 'log'])
 
 
     args = parser.parse_args()
