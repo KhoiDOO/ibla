@@ -1,1 +1,2 @@
 from .vanilla_clf import VanillaClassifierV0, VanillaClassifierV1, VanillaClassifierV2
+from .vanilla_clf_stable import VanillaClassifierStableV0, VanillaClassifierStableV1, VanillaClassifierStableV2
