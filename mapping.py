@@ -1,10 +1,15 @@
-from model import Unet, CLF
+from model import Unet, Base, get_resnet18
 from metrics import miou, pixel_accuracy, depth_error, accuracy, depth_rel_error, depth_abs_error
 from loss import VanillaClassifierStableV0, VanillaSegmenterStableV0
 
 # MODEL
 enc_dec_mapping = {
     'unet' : Unet
+}
+
+clf_metrics_mapping = {
+    'base' : Base,
+    'resnet18' : get_resnet18
 }
 
 # METRICS
@@ -55,14 +60,14 @@ mapping = {
     },
     'cifar10' : {
         'clf' : {
-            'model' : CLF,
+            'model' : clf_metrics_mapping,
             'metrics' : clf_metrics_mapping,
             'loss' : clf_loss
         }
     },
     'cifar100' : {
         'clf' : {
-            'model' : CLF,
+            'model' : clf_metrics_mapping,
             'metrics' : clf_metrics_mapping,
             'loss' : clf_loss
         }
