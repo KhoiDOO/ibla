@@ -9,17 +9,17 @@ class VanillaClassifierV0(nn.Module):
         super().__init__()
         self.args = args
         self.act = nn.Softmax(dim=1)
-        self.log_type = {
-            'log2' : torch.log2,
-            'log10' : torch.log10,
-            'log' : torch.log
-        }
+        # self.log_type = {
+        #     'log2' : torch.log2,
+        #     'log10' : torch.log10,
+        #     'log' : torch.log
+        # }
 
     def forward(self, pred, target) -> torch.Tensor:
 
         pred_soft = self.act(pred)
 
-        logits = self.log_type[self.args.log_type](pred_soft)
+        logits = torch.log(pred_soft)
 
         B, C = tuple(logits.size())
 
@@ -38,7 +38,7 @@ class VanillaClassifierV1(VanillaClassifierV0):
 
         pred_soft = self.act(pred)
 
-        logits = self.log_type[self.args.log_type](pred_soft)
+        logits = torch.log(pred_soft)
 
         B = list(target.size())[0]
         
@@ -64,7 +64,7 @@ class VanillaClassifierV2(VanillaClassifierV0):
 
         pred_soft = self.act(pred)
 
-        logits = self.log_type[self.args.log_type](pred_soft)
+        logits = torch.log(pred_soft)
 
         B, C = tuple(logits.size())
         

@@ -8,7 +8,7 @@ class VanillaSegmenterV0(VanillaClassifierV0):
     def forward(self, pred, target) -> torch.Tensor:
         pred_soft = self.act(pred)
 
-        logits = self.log_type[self.args.log_type](pred_soft)
+        logits = torch.log(pred_soft)
 
         B, C, H, W = tuple(logits.size())
 
@@ -26,7 +26,7 @@ class VanillaSegmenterV1(VanillaSegmenterV0):
 
         pred_soft = self.act(pred)
 
-        logits = self.log_type[self.args.log_type](pred_soft)
+        logits = torch.log(pred_soft)
 
         B, C, H, W = tuple(logits.size())
 
