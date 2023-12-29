@@ -52,7 +52,7 @@ def train_func(args):
     loss_fn = task_dict["loss"][args.loss](args=args)
 
     # model
-    model = task_dict["model"](args=args).to(device)
+    model = task_dict["model"][args.model](args=args).to(device)
 
     # optimizer, scheduler
     optimizer = Adam(model.parameters(), lr = 0.001)
