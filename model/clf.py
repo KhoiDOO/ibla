@@ -13,8 +13,11 @@ def CLF(args):
         raise ValueError(f"the backbone {args.model} is not supported in classification experiments")
 
 class Base(nn.Module):
-    def __init__(self, num_classes):
+    def __init__(self, args):
         super(Base, self).__init__()
+        
+        self.args = args
+        self.num_classes = self.args.n_classes
 
         self.layer1 = nn.Sequential(
             nn.Conv2d(3, 12, 4, stride=2, padding=1),            # [batch, 12, 16, 16]
@@ -25,7 +28,7 @@ class Base(nn.Module):
             nn.ReLU(),
         )
 
-        self.fc1 = nn.Linear(4 * 4 * 48, num_classes)
+        self.fc1 = nn.Linear(4 * 4 * 48, self.num_classes)
 
 
     def forward(self, x):
@@ -33,3 +36,6 @@ class Base(nn.Module):
         x = x.reshape(x.size(0), -1)
         x = self.fc1(x)
         return x
+
+def get_resnet18(args):
+    return models.resnet18(num_classes = args.n_classes)
