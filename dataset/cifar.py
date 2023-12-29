@@ -6,8 +6,10 @@ import numpy as np
 from rich.progress import track
 
 transform = transforms.Compose(
-    transforms.ToTensor(),
-    transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+    [
+        transforms.ToTensor(),
+        transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+    ]
 )
 
 
