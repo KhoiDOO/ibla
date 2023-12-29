@@ -49,7 +49,7 @@ def train_func(args):
     metric_dict = task_dict["metrics"]
 
     # loss
-    loss_fn = task_dict["loss"](args=args)
+    loss_fn = task_dict["loss"][args.loss](args=args)
 
     # model
     model = task_dict["model"](args=args).to(device)
@@ -151,16 +151,21 @@ def train_func(args):
                 log_interface(key=f"test/{metric_key}", value=metric_value)
 
     # finalization
-    for idx in range(10):
-        img, target = test_ds[idx]
-        img = img.unsqueeze(0).to(device)
+    if args.task == "semantic":
+        perform_dir = args.exp_dir + f"/{args.task}"
+        if not os.path.exists(perform_dir):
+            os.mkdir(perform_dir)
         
-        pred = model(img)
+        img_dir = args.exp_dir + f"/img"
+        if not os.path.exists(img_dir):
+            os.mkdir(img_dir)
         
-        if args.task == "semantic":
-            perform_dir = args.exp_dir + f"/{args.task}"
-            if not os.path.exists(perform_dir):
-                os.mkdir(perform_dir)
+        for idx in range(10):
+            img, target = test_ds[idx]
+            img = img.unsqueeze(0).to(device)
+            
+            pred = model(img)
+            
             pred_task_np = torch.argmax(pred[0], dim=0).cpu().unsqueeze(0).permute(1, -1, 0).numpy()
             lble_task_np = torch.argmax(target, dim=0).cpu().unsqueeze(0).permute(1, -1, 0).numpy()
 
@@ -175,22 +180,18 @@ def train_func(args):
                 plt.savefig(_path, format='pdf', dpi=300)
 
                 plt.close()
-
-        img_dir = args.exp_dir + f"/img"
-        if not os.path.exists(img_dir):
-            os.mkdir(img_dir)
-        
-        if args.ds == 'oxford':
-            img_np = invnorm(img[0]).cpu().permute(1, -1, 0).numpy()
             
-        path = img_dir + f"/{idx}.pdf"
-        plt.figure()
+            if args.ds == 'oxford':
+                img_np = invnorm(img[0]).cpu().permute(1, -1, 0).numpy()
+                
+            path = img_dir + f"/{idx}.pdf"
+            plt.figure()
 
-        plt.imshow(img_np)
-        plt.axis('off')
-        plt.savefig(path, format='pdf', dpi=300, pad_inches=0)
+            plt.imshow(img_np)
+            plt.axis('off')
+            plt.savefig(path, format='pdf', dpi=300, pad_inches=0)
 
-        plt.close()
+            plt.close()
     
     if args.verbose:
         print("Ending")
