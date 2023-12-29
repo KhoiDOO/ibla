@@ -39,7 +39,7 @@ pip3 install torch torchvision torchaudio
 
 ## Dataset Contribution
 - Data sources and related annotations must be put into ```dataset/source``` folder, which is an ignored folder. A custom dataset class inheriting ```torch.utils.data.Dataset``` of Pytorch and read all data from ```dataset/source```.
-- :warning::warning:: Do not change the content of any file inside ```dataset/source```, just create a new ```.py``` file to contribute your custom dataset. 
+- :warning::warning:: Do not change the content of any file inside ```dataset/```, just create a new ```.py``` file to contribute your custom dataset. 
 
 ## Model/Loss Contribution
 - Create a new folder/new file ```.py``` to store your model architecture/loss function and its sub-components
