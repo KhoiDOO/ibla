@@ -1,7 +1,7 @@
-from .vanilla_clf import VanillaClassifierV0
+from .vanilla_clf_stable import VanillaClassifierStableV0
 import torch
 
-class VanillaSegmenterStableV0(VanillaClassifierV0):
+class VanillaSegmenterStableV0(VanillaClassifierStableV0):
     def __init__(self, args) -> None:
         super().__init__(args)
 
