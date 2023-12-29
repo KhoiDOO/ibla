@@ -49,7 +49,7 @@ class ImbalanceCIFAR10(torchvision.datasets.CIFAR10):
     def gen_imbalanced_data(self, img_num_per_cls):
         new_data = []
         new_targets = []
-        targets_np = np.array(self.targets, dtype=np.int64)
+        targets_np = np.array(self.targets, dtype=np.int64) 
         classes = np.unique(targets_np)
         self.num_per_cls_dict = dict()
         for the_class, the_img_num in track(zip(classes, img_num_per_cls)):

@@ -6,6 +6,9 @@ from .celeb import CustomCeleb
 from .ox import CustomOxFordPet
 from .cifar import ImbalanceCIFAR10, ImbalanceCIFAR100
 
+from torchvision.datasets import CIFAR10, CIFAR100
+import torchvision.transforms as transforms
+
 from torch.utils.data import Dataset, DataLoader, random_split, ConcatDataset
 
 
@@ -100,7 +103,7 @@ def get_ds_city(args):
 
     return (train_ds, valid_ds, test_ds, train_dl, valid_dl, test_dl), args
 
-def get_ds_cifar(args):
+def get_ds_cifar_lt(args):
     if args.ds == 'cifar10':
         data_interface = ImbalanceCIFAR10
         args.n_classes = 10
@@ -135,6 +138,49 @@ def get_ds_cifar(args):
 
     return (train_ds, valid_ds, test_ds, train_dl, valid_dl, test_dl), args
 
+def get_ds_cifar(args):
+    transform = transforms.Compose(
+        [
+            transforms.ToTensor(),
+            transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+        ]
+    )
+    
+    if args.ds == 'cifar10':
+        data_interface = CIFAR10
+        args.n_classes = 10
+    elif args.ds == 'cifar100':
+        data_interface = CIFAR100
+        args.n_classes = 100
+    
+    train_ds = data_interface(
+        root="/".join(__file__.split("/")[:-1]) + "/source",
+        transform=transform,
+        download=True,
+        train=True
+    )
+    
+    valid_ds = data_interface(
+        root="/".join(__file__.split("/")[:-1]) + "/source",
+        transform=transform,
+        download=True,
+        train=False
+    )
+
+    test_ds = valid_ds
+    
+    train_dl = DataLoader(train_ds, batch_size=args.bs, shuffle=True, pin_memory=args.pinmem, num_workers=args.wk)
+    valid_dl = DataLoader(valid_ds, batch_size=args.bs, shuffle=True, pin_memory=args.pinmem, num_workers=args.wk)
+    test_dl = DataLoader(test_ds, batch_size=args.bs, shuffle=True, pin_memory=args.pinmem, num_workers=args.wk)
+
+    args.num_train_sample = len(train_ds)
+    args.num_valid_sample = len(valid_ds)
+    args.num_test_sample = len(test_ds)
+    args.num_train_batch = len(train_dl)
+    args.num_valid_batch = len(valid_dl)
+    args.num_test_batch = len(test_dl)
+    
+    return (train_ds, valid_ds, test_ds, train_dl, valid_dl, test_dl), args
 
 def get_ds(args):
 
@@ -143,6 +189,8 @@ def get_ds(args):
         "nyu" : get_ds_nyu,
         "celeb" : get_ds_celeb,
         "city" : get_ds_city,
+        "cifar10lt" : get_ds_cifar_lt,
+        "cifar100lt" : get_ds_cifar_lt,
         "cifar10" : get_ds_cifar,
         "cifar100" : get_ds_cifar
     }
