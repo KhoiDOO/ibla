@@ -7,7 +7,7 @@ if __name__ == "__main__":
 
     # DATASET
     parser.add_argument('--ds', type=str, required=True, choices = [
-        'oxford', 'nyu', 'celeb', 'city', 'cifar10', 'cifar100'
+        'oxford', 'nyu', 'celeb', 'city', 'cifar10lt', 'cifar100lt', 'cifar10', 'cifar100'
         ],
         help='dataset used in training')
     parser.add_argument('--bs', type=int, required=True, default=64,
@@ -22,7 +22,7 @@ if __name__ == "__main__":
     # DATASET - CIFAR10/100
     parser.add_argument('--imb_type', type=str, default='exp', choices=['exp', 'step'],
         help='type of imbalance')
-    parser.add_argument('--imb_factor', type=float, default=0.01,
+    parser.add_argument('--imb_factor', type=float, default=0.01, #0.1, 0.01, 0.05, 0.001
         help='imbalance factor')
     parser.add_argument('--rand_number', type=int, default=0,
         help='seed random number')
@@ -30,7 +30,7 @@ if __name__ == "__main__":
     # TRAINING GENERAL SETTINGS
     parser.add_argument('--idx', type=int, default=0,
         help='device index used in training')
-    parser.add_argument('--model', type=str, default='unet', choices=['unet', 'resnet18'],
+    parser.add_argument('--model', type=str, default='unet', choices=['unet', 'resnet18', 'base'],
         help='backbone used in training')
     parser.add_argument('--loss', type=str, default='vanilla', 
         choices=['vanilla'],
@@ -62,7 +62,7 @@ if __name__ == "__main__":
         help='learning rate')
     
     # VANILLA LOSS
-    parser.add_argument('--log_type', type=str, default='log2', choices=['log2', 'log10', 'log'])
+    # parser.add_argument('--log_type', type=str, default='log', choices=['log2', 'log10', 'log'])
 
 
     args = parser.parse_args()
