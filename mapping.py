@@ -1,6 +1,6 @@
 from model import Unet, CLF
 from metrics import miou, pixel_accuracy, depth_error, accuracy, depth_rel_error, depth_abs_error
-from loss import VanillaClassifierV0
+from loss import VanillaClassifierStableV0, VanillaSegmenterStableV0
 
 # MODEL
 enc_dec_mapping = {
@@ -24,7 +24,11 @@ clf_metrics_mapping = {
 
 # LOSSES
 clf_loss = {
-    "vanilla" : VanillaClassifierV0
+    "vanilla" : VanillaClassifierStableV0
+}
+
+seg_loss = {
+    "vanilla" : VanillaSegmenterStableV0
 }
 
 
@@ -34,7 +38,8 @@ mapping = {
     'city' : {
         'seg' : {
             'model' : enc_dec_mapping,
-            'metrics' : seg_metrics_mapping
+            'metrics' : seg_metrics_mapping,
+            'loss' : seg_loss
         },
         # 'depth' : {
         #     'model' : enc_dec_mapping,
@@ -44,7 +49,8 @@ mapping = {
     'oxford' : {
         'seg' : {
             'model' : enc_dec_mapping,
-            'metrics' : seg_metrics_mapping
+            'metrics' : seg_metrics_mapping,
+            'loss' : seg_loss
         }
     },
     'cifar10' : {
