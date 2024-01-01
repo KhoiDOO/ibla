@@ -5,3 +5,6 @@ from .vanilla_clf_stable import VanillaClassifierStableV0, VanillaClassifierStab
 from .vanilla_seg_stable import VanillaSegmenterStableV0, VanillaSegmenterStableV1
 
 from .focal import FocalClassifierV0, FocalSegmenterV0
+
+from .class_balance_loss import CBClassifierV0, CBSegmenterV0
+from .cbfocal import CBFocalClassifierV0, CBFocalSegmenterV0
