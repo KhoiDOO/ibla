@@ -1,13 +1,14 @@
 from model import Unet, Base, get_resnet18
 from metrics import miou, pixel_accuracy, depth_error, accuracy, depth_rel_error, depth_abs_error
-from loss import VanillaClassifierStableV0, VanillaSegmenterStableV0
+from loss import VanillaClassifierStableV0, VanillaSegmenterStableV0, CBClassifierV0, CBSegmenterV0, \
+    FocalClassifierV0, FocalSegmenterV0, CBFocalClassifierV0, CBFocalSegmenterV0 
 
 # MODEL
 enc_dec_mapping = {
     'unet' : Unet
 }
 
-clf_metrics_mapping = {
+clf_model_mapping = {
     'base' : Base,
     'resnet18' : get_resnet18
 }
@@ -29,11 +30,17 @@ clf_metrics_mapping = {
 
 # LOSSES
 clf_loss = {
-    "vanilla" : VanillaClassifierStableV0
+    "vanilla" : VanillaClassifierStableV0,
+    "focal" : FocalClassifierV0,
+    "cb" : CBClassifierV0,
+    "cbfocal" : CBFocalClassifierV0
 }
 
 seg_loss = {
-    "vanilla" : VanillaSegmenterStableV0
+    "vanilla" : VanillaSegmenterStableV0,
+    "focal" : FocalSegmenterV0,
+    "cb" : FocalSegmenterV0,
+    "cbfocal" : CBFocalSegmenterV0
 }
 
 
@@ -60,14 +67,14 @@ mapping = {
     },
     'cifar10' : {
         'clf' : {
-            'model' : clf_metrics_mapping,
+            'model' : clf_model_mapping,
             'metrics' : clf_metrics_mapping,
             'loss' : clf_loss
         }
     },
     'cifar100' : {
         'clf' : {
-            'model' : clf_metrics_mapping,
+            'model' : clf_model_mapping,
             'metrics' : clf_metrics_mapping,
             'loss' : clf_loss
         }

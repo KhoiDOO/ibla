@@ -33,7 +33,7 @@ if __name__ == "__main__":
     parser.add_argument('--model', type=str, default='unet', choices=['unet', 'resnet18', 'base'],
         help='backbone used in training')
     parser.add_argument('--loss', type=str, default='vanilla', 
-        choices=['vanilla'],
+        choices=['vanilla', 'focal', 'cb', 'cbfocal'],
         help='loss function used in training')
     parser.add_argument('--task', type=str, default='clf', required=True,
         choices=['clf', 'seg'],
@@ -63,6 +63,10 @@ if __name__ == "__main__":
     
     # VANILLA LOSS
     # parser.add_argument('--log_type', type=str, default='log', choices=['log2', 'log10', 'log'])
+    
+    # FOCAL - CLASS-BALANCE FOCAL LOSS
+    parser.add_argument('--gamma', type=float, default=0, 
+        help="gamma hyperparameter used in focal loss")
 
 
     args = parser.parse_args()
