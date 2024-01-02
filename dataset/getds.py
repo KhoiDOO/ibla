@@ -104,10 +104,10 @@ def get_ds_city(args):
     return (train_ds, valid_ds, test_ds, train_dl, valid_dl, test_dl), args
 
 def get_ds_cifar_lt(args):
-    if args.ds == 'cifar10':
+    if args.ds == 'cifar10lt':
         data_interface = ImbalanceCIFAR10
         args.n_classes = 10
-    elif args.ds == 'cifar100':
+    elif args.ds == 'cifar100lt':
         data_interface = ImbalanceCIFAR100
         args.n_classes = 100
 
@@ -145,6 +145,8 @@ def get_ds_cifar(args):
             transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
         ]
     )
+    
+    data_interface = None
     
     if args.ds == 'cifar10':
         data_interface = CIFAR10
