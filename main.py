@@ -19,7 +19,7 @@ if __name__ == "__main__":
     parser.add_argument('--citi_mode', type=str, default='fine',  choices=['fine', 'coarse'],
         help='mode used for cityscape dataset')
     
-    # DATASET - CIFAR10/100
+    # DATASET - CIFAR10/100 LT
     parser.add_argument('--imb_type', type=str, default='exp', choices=['exp', 'step'],
         help='type of imbalance')
     parser.add_argument('--imb_factor', type=float, default=0.01, #0.1, 0.01, 0.05, 0.001
