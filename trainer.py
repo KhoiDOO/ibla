@@ -49,7 +49,8 @@ def train_func(args):
     metric_dict = task_dict["metrics"]
 
     # loss
-    loss_fn = task_dict["loss"][args.loss](args=args)
+    train_loss_fn = task_dict["loss"][args.loss](args=args)
+    eval_loss_fn = task_dict["loss"]['vanilla'](args=args)
 
     # model
     model = task_dict["model"][args.model](args=args).to(device)
@@ -80,7 +81,7 @@ def train_func(args):
             target = target.to(device)
 
             pred = model(img)
-            loss = loss_fn(pred, target)
+            loss = train_loss_fn(pred, target)
 
             log_interface(key="train/loss", value=loss.item())
 
@@ -102,7 +103,7 @@ def train_func(args):
                 target = target.to(device)
 
                 pred = model(img)
-                loss = loss_fn(pred, target)
+                loss = eval_loss_fn(pred, target)
 
                 log_interface(key="valid/loss", value=loss.item())
 
@@ -142,7 +143,7 @@ def train_func(args):
             target = target.to(device)
 
             pred = model(img)
-            loss = loss_fn(pred, target)
+            loss = eval_loss_fn(pred, target)
 
             log_interface(key="test/loss", value=loss.item())
 
