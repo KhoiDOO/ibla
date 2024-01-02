@@ -78,5 +78,19 @@ mapping = {
             'metrics' : clf_metrics_mapping,
             'loss' : clf_loss
         }
+    },
+    'cifar10lt' : {
+        'clf' : {
+            'model' : clf_model_mapping,
+            'metrics' : clf_metrics_mapping,
+            'loss' : clf_loss
+        }
+    },
+    'cifar100lt' : {
+        'clf' : {
+            'model' : clf_model_mapping,
+            'metrics' : clf_metrics_mapping,
+            'loss' : clf_loss
+        }
     }
 }
