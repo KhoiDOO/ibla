@@ -152,7 +152,7 @@ def train_func(args):
                 log_interface(key=f"test/{metric_key}", value=metric_value)
 
     # finalization
-    if args.task == "semantic":
+    if args.task == "seg":
         perform_dir = args.exp_dir + f"/{args.task}"
         if not os.path.exists(perform_dir):
             os.mkdir(perform_dir)
