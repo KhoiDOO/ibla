@@ -15,30 +15,29 @@ import torch.nn.functional as F
 from torch import Tensor
 import albumentations as A
 
-__file__ = "/home/duong/git/ibla/dataset/source"
 _root = "/".join(__file__.split("/")[:-1]) + "/source/bagls"
 
 class CustomBagls(Dataset):
-    def __init__(self, root:str = _root, split = 'training', args:argparse = None):
+    def __init__(self, root:str = _root, split='train', args:argparse = None):
         self.root = root
         self.args = args
         # if self.args is None:
         #     raise ValueError("args cannot be None")
         self._split = split
-        self.__mode = "train" if self._split == 'training' else 'test'
-
+        self.__mode = "train" if self._split == 'train' else 'test'
+        
         self.resize = A.Compose(
             [
                 A.Resize(256, 256),
-            ]
+            ], is_check_shapes=False
         )
 
-        # self.aug_transforms = A.Compose(
-        #     [
-        #         A.HorizontalFlip(p=0.2),
-        #         A.ShiftScaleRotate(shift_limit=0.0625, scale_limit=0.1, rotate_limit=3, p=0.5, border_mode = cv2.BORDER_CONSTANT),
-        #     ]
-        # )
+        self.aug_transforms = A.Compose(
+            [
+                A.HorizontalFlip(p=0.2),
+                A.ShiftScaleRotate(shift_limit=0.0625, scale_limit=0.1, rotate_limit=3, p=0.5, border_mode = cv2.BORDER_CONSTANT),
+            ]
+        )
 
         self.norm = A.Compose(
             [
@@ -46,16 +45,13 @@ class CustomBagls(Dataset):
             ]
         )
         
-        from glob import glob       
-        self._images = sorted(glob(self.root + "/training/images/*"))
-        self._masks = sorted(glob(self.root + "/training/masks/*"))
-        idx = 0
-        print("Image Path:", self._images[idx])
-        print("Mask Path:", self._masks[idx])
-        
+        from glob import glob
+        self._images = sorted(glob(self.root+ "/training/images/*"))
+        self._masks = sorted(glob(self.root+ "/training/masks/*"))
+
         print("Data Set Setting Up. Done")
-        
-    @staticmethod
+                
+    @staticmethod 
     def process_mask(x):
         uniques = torch.unique(x, sorted = True)
         if uniques.shape[0] > 3:
@@ -70,26 +66,22 @@ class CustomBagls(Dataset):
 
     def __len__(self):
         return len(self._images)
-
     def __getitem__(self, idx):
         image = np.array(Image.open(self._images[idx]).convert("RGB"))
-        mask = np.array(Image.open(self._masks[idx]))  
+        mask = np.array(Image.open(self._masks[idx]))
 
-        resized = self.resize(image=image, mask=mask)
-        transformed_img = self.norm(image=resized['image'])['image']
-        transformed_mask = resized['mask']
-        
-        # if self.__mode == 'train':
-            # transformed = self.aug_transforms(image=resized['image'], mask=resized['mask'])
-            # transformed_img = self.norm(image=transformed["image"])["image"]
-            # transformed_mask = transformed["mask"]
-        
-        # else:
-        #     transformed_img = self.norm(image=resized['image'])['image']
-        #     transformed_mask = resized['mask']
+        resized = self.resize(image = image, mask = mask)
 
-        torch_img = torch.from_numpy(transformed_img).permute(2, 0, 1).float()
-        torch_mask = torch.from_numpy(transformed_mask).unsqueeze(0).permute(0, 2, 1).float()
+        if self.__mode == 'train':
+            transformed = self.aug_transforms(image = resized['image'], mask = resized['mask'])
+            transformed_img = self.norm(image=transformed["image"])["image"]
+            transformed_mask = transformed["mask"]
+        else:
+            transformed_img = self.norm(image=resized['image'])['image']
+            transformed_mask = resized['mask']
+
+        torch_img = torch.from_numpy(transformed_img).permute(-1, 0, 1).float()
+        torch_mask = torch.from_numpy(transformed_mask).unsqueeze(-1).permute(-1, 0, 1).float()
 
         return torch_img, self.process_mask(torch_mask)
 
