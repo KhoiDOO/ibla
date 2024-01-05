@@ -8,3 +8,5 @@ from .focal import FocalClassifierV0, FocalSegmenterV0
 
 from .class_balance_loss import CBClassifierV0, CBSegmenterV0
 from .cbfocal import CBFocalClassifierV0, CBFocalSegmenterV0
+
+from .bsl import BSLClassifierV0, BSLSegmenterV0
