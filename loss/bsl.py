@@ -13,7 +13,7 @@ class BSLClassifierV0(nn.Module):
         
         B, C = tuple(pred.size())
         
-        class_freq = torch.zeros(1, C).to(pred.device)
+        class_freq = torch.zeros(C).to(pred.device)
 
         for idx, _cls in enumerate(range(C)):
             cnt = (target == _cls).sum()
@@ -39,7 +39,7 @@ class BSLSegmenterV0(nn.Module):
         _pred_exp = pred_exp.permute(0, 2, 3, 1).flatten(0, -2)
         _target = target.permute(0, 2, 3, 1).flatten(0, -2)
         
-        class_freq = torch.zeros(1, C).to(pred.device)
+        class_freq = torch.zeros(C).to(pred.device)
 
         for idx, _cls in enumerate(range(C)):
             cnt = (target.argmax(1) == _cls).sum()
