@@ -33,7 +33,7 @@ if __name__ == "__main__":
     parser.add_argument('--model', type=str, default='unet', choices=['unet', 'resnet18', 'base'],
         help='backbone used in training')
     parser.add_argument('--loss', type=str, default='vanilla', 
-        choices=['vanilla', 'focal', 'cb', 'cbfocal'],
+        choices=['vanilla', 'focal', 'cb', 'cbfocal', 'bsl'],
         help='loss function used in training')
     parser.add_argument('--task', type=str, default='clf', required=True,
         choices=['clf', 'seg'],

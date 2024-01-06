@@ -1,7 +1,8 @@
 from model import Unet, Base, get_resnet18
 from metrics import miou, pixel_accuracy, depth_error, accuracy, depth_rel_error, depth_abs_error
 from loss import VanillaClassifierStableV0, VanillaSegmenterStableV0, CBClassifierV0, CBSegmenterV0, \
-    FocalClassifierV0, FocalSegmenterV0, CBFocalClassifierV0, CBFocalSegmenterV0 
+    FocalClassifierV0, FocalSegmenterV0, CBFocalClassifierV0, CBFocalSegmenterV0, \
+        BSLClassifierV0, BSLSegmenterV0
 
 # MODEL
 enc_dec_mapping = {
@@ -33,14 +34,16 @@ clf_loss = {
     "vanilla" : VanillaClassifierStableV0,
     "focal" : FocalClassifierV0,
     "cb" : CBClassifierV0,
-    "cbfocal" : CBFocalClassifierV0
+    "cbfocal" : CBFocalClassifierV0,
+    "bsl" : BSLClassifierV0
 }
 
 seg_loss = {
     "vanilla" : VanillaSegmenterStableV0,
     "focal" : FocalSegmenterV0,
     "cb" : FocalSegmenterV0,
-    "cbfocal" : CBFocalSegmenterV0
+    "cbfocal" : CBFocalSegmenterV0,
+    "bsl" : BSLSegmenterV0
 }
 
 
