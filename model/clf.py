@@ -44,4 +44,4 @@ def get_resnet18(args):
     return models.resnet18(num_classes = args.n_classes)
 
 def get_resnet18_scratch(args):
-    return 
+    return ResNet18(num_classes = args.n_classes)
