@@ -2,7 +2,7 @@ import os, sys
 import torch
 from torch import nn
 from torchvision import models
-from resnet_sc import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
+from .resnet_sc import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
 
 
 def CLF(args):
@@ -44,4 +44,4 @@ def get_resnet18(args):
     return models.resnet18(num_classes = args.n_classes)
 
 def get_resnet18_scratch(args):
-    return ResNet18(num_classes = args.n_classes)
+    return 
