@@ -2,6 +2,7 @@ import os, sys
 import torch
 from torch import nn
 from torchvision import models
+from resnet_sc import ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
 
 
 def CLF(args):
@@ -9,6 +10,8 @@ def CLF(args):
         return models.resnet18(num_classes = args.n_classes)
     elif args.model == 'base':
         return Base(num_classes=args.n_classes)
+    elif args.model == 'resnet18_scratch':
+        return ResNet18(num_classes = args.n_classes)
     else:
         raise ValueError(f"the backbone {args.model} is not supported in classification experiments")
 
@@ -39,3 +42,6 @@ class Base(nn.Module):
 
 def get_resnet18(args):
     return models.resnet18(num_classes = args.n_classes)
+
+def get_resnet18_scratch(args):
+    return ResNet18(num_classes = args.n_classes)

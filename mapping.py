@@ -1,4 +1,4 @@
-from model import Unet, Base, get_resnet18
+from model import Unet, Base, get_resnet18, get_resnet18_scratch
 from metrics import miou, pixel_accuracy, depth_error, accuracy, depth_rel_error, depth_abs_error
 from loss import VanillaClassifierStableV0, VanillaSegmenterStableV0, CBClassifierV0, CBSegmenterV0, \
     FocalClassifierV0, FocalSegmenterV0, CBFocalClassifierV0, CBFocalSegmenterV0, \
@@ -11,7 +11,8 @@ enc_dec_mapping = {
 
 clf_model_mapping = {
     'base' : Base,
-    'resnet18' : get_resnet18
+    'resnet18' : get_resnet18,
+    'resnet18_scratch' : get_resnet18_scratch
 }
 
 # METRICS
