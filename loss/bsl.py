@@ -3,9 +3,12 @@ import torch
 from torch import nn 
 import torch.nn.functional as F
 
-class BSLClassifierV0(nn.Module):
+from .vanilla_clf_stable import VanillaClassifierStableV0
+
+
+class BSLClassifierV0(VanillaClassifierStableV0):
     def __init__(self, args) -> None:
-        super().__init__()
+        super().__init__(args)
         
     def forward(self, pred, target) -> torch.Tensor:
         
@@ -21,13 +24,13 @@ class BSLClassifierV0(nn.Module):
 
         class_scaled_pred = pred_exp * class_freq
         
-        logits = class_scaled_pred.log() - torch.cat([class_scaled_pred.sum(1).log().unsqueeze(1)]*C, dim = 1)
+        logits = self.act(class_scaled_pred)
 
         entropy = logits * F.one_hot(target, num_classes=C).float()
 
         return (-1 / B) * torch.sum(entropy)
 
-class BSLSegmenterV0(nn.Module):
+class BSLSegmenterV0(VanillaClassifierStableV0):
     def __init__(self, args) -> None:
         super().__init__(args)
 
@@ -47,7 +50,7 @@ class BSLSegmenterV0(nn.Module):
         
         class_scaled_pred = _pred_exp * class_freq
         
-        logits = class_scaled_pred.log() - torch.cat([class_scaled_pred.sum(1).log().unsqueeze(1)]*C, dim = 1)
+        logits = self.act(class_scaled_pred)
 
         entropy = logits * target
 
