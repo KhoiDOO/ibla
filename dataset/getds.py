@@ -11,7 +11,7 @@ import torchvision.transforms as transforms
 
 from torch.utils.data import Dataset, DataLoader, random_split, ConcatDataset
 
-
+from .vocalfolds import Customvocalfolds
 def get_ds_ox(args):
     train_ds = CustomOxFordPet(split = 'trainval', args=args)
     test_ds = CustomOxFordPet(split = 'test', args=args)
@@ -184,6 +184,28 @@ def get_ds_cifar(args):
     
     return (train_ds, valid_ds, test_ds, train_dl, valid_dl, test_dl), args
 
+def get_ds_vocalfolds(args):
+    train_ds = Customvocalfolds(split = 'trainval', args=args)
+    valid_ds = Customvocalfolds(split = 'valid', args=args)
+    test_ds = Customvocalfolds(split = 'test', args=args)
+
+
+    train_dl = DataLoader(train_ds, batch_size=args.bs, shuffle=True, pin_memory=args.pinmem, num_workers=args.wk)
+    valid_dl = DataLoader(valid_ds, batch_size=args.bs, shuffle=True, pin_memory=args.pinmem, num_workers=args.wk)
+    test_dl = DataLoader(test_ds, batch_size=args.bs, shuffle=True, pin_memory=args.pinmem, num_workers=args.wk)
+
+    args.seg_n_classes = 7
+
+    args.num_train_sample = len(train_ds)
+    args.num_valid_sample = len(valid_ds)
+    args.num_test_sample = len(test_ds)
+    args.num_train_batch = len(train_dl)
+    args.num_valid_batch = len(valid_dl)
+    args.num_test_batch = len(test_dl)
+
+    return (train_ds, valid_ds, test_ds, train_dl, valid_dl, test_dl), args
+
+
 def get_ds(args):
 
     ds_mapping = {
@@ -194,9 +216,11 @@ def get_ds(args):
         "cifar10lt" : get_ds_cifar_lt,
         "cifar100lt" : get_ds_cifar_lt,
         "cifar10" : get_ds_cifar,
-        "cifar100" : get_ds_cifar
+        "cifar100" : get_ds_cifar,
+        "vocalfolds" : get_ds_vocalfolds
     }
 
     data, args = ds_mapping[args.ds](args)
 
     return data, args
+

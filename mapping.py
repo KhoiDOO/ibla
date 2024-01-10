@@ -96,5 +96,12 @@ mapping = {
             'metrics' : clf_metrics_mapping,
             'loss' : clf_loss
         }
+    },
+    'vocalfolds' : {
+        'seg' : {
+            'model' : enc_dec_mapping,
+            'metrics' : seg_metrics_mapping,
+            'loss' : seg_loss
+        },
     }
 }
