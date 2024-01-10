@@ -13,16 +13,16 @@ import torch.nn.functional as F
 from torch import Tensor
 import albumentations as A
 
-_root = "/".join(__file__.split("/")[:-1]) + "/source/vocalfolds-master"
+_root = "/".join(__file__.split("/")[:-1]) + "/source/vocalfolds"
 
-class Customvocaldfold_master(Dataset):
-    def __init__(self, root:str = _root, x='train', args:argparse = None):
+class Customvocalfolds(Dataset):
+    def __init__(self, root:str = _root, split = 'trainval', args:argparse = None):
         self.root = root
         self.args = args
         if self.args is None:
             raise ValueError("args cannot be None")
-        self.__mode = "train" if x == 'train' else 'test'
-        
+        self._split = split
+        self.__mode = "train" if self._split == 'trainval' else 'test'       
         self.resize = A.Compose(
             [
                 A.Resize(256, 256),
@@ -48,8 +48,7 @@ class Customvocaldfold_master(Dataset):
         print("Data Set Setting Up")
         print(len(self._images),len(self._segs))
 
-        
-    @staticmethod 
+    @staticmethod
     def process_mask(x):
         uniques = torch.unique(x, sorted = True)
         if uniques.shape[0] > 3:
@@ -59,11 +58,12 @@ class Customvocaldfold_master(Dataset):
             x[x == v] = i
         
         x = x.to(dtype=torch.long)
-        onehot = F.one_hot(x.squeeze(1), 3).permute(0, 3, 1, 2)[0].float()
+        onehot = F.one_hot(x.squeeze(1), 7).permute(0, 3, 1, 2)[0].float()
         return onehot
 
     def __len__(self):
         return len(self._images)
+    
     def __getitem__(self, idx):
         image = np.array(Image.open(self._images[idx]).convert("RGB"))
         mask = np.array(Image.open(self._segs[idx]))
