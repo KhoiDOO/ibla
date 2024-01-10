@@ -19,8 +19,8 @@ class CustomBagls(Dataset):
     def __init__(self, root:str = _root, split='train', args:argparse = None):
         self.root = root
         self.args = args
-        # if self.args is None:
-        #     raise ValueError("args cannot be None")
+        if self.args is None:
+            raise ValueError("args cannot be None")
         self._split = split
         self.__mode = "train" if self._split == 'train' else 'test'
         
@@ -48,21 +48,6 @@ class CustomBagls(Dataset):
         self._masks = sorted(glob(self.root+ "/*/masks/*"), key=lambda x: int(''.join(filter(str.isdigit, x))))
         
         print("Data Set Setting Up. Done")
-                
-    @staticmethod 
-    def process_mask(x):
-        uniques = torch.unique(x, sorted=True)
-        num_classes = 3   
-        
-        if uniques.shape[0] > num_classes:
-            x[x == 0] = uniques[num_classes - 1]
-            uniques = torch.unique(x, sorted=True)
-        for i, v in enumerate(uniques):
-            x[x == v] = i
-        x = x.to(dtype=torch.long)
-    
-        onehot = F.one_hot(x.squeeze(1), num_classes).permute(0, 3, 1, 2)[0].float()
-        return onehot
 
     def __len__(self):
         return len(self._images)
@@ -89,7 +74,7 @@ class CustomBagls(Dataset):
         torch_img = torch.from_numpy(transformed_img).permute(-1, 0, 1).float()
         torch_mask = torch.from_numpy(transformed_mask).unsqueeze(-1).permute(-1, 0, 1).float()
 
-        return torch_img, self.process_mask(torch_mask)
+        return torch_img, torch_mask
 
     @property
     def mode(self):
