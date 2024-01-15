@@ -2,7 +2,8 @@ from model import Unet, Base, get_resnet18, get_resnet18_scratch
 from metrics import miou, pixel_accuracy, depth_error, accuracy, depth_rel_error, depth_abs_error
 from loss import VanillaClassifierStableV0, VanillaSegmenterStableV0, CBClassifierV0, CBSegmenterV0, \
     FocalClassifierV0, FocalSegmenterV0, CBFocalClassifierV0, CBFocalSegmenterV0, \
-        BSLClassifierV0, BSLSegmenterV0
+        BSLClassifierV0, BSLSegmenterV0, \
+            GumbelFocalClassifierV0, GumbelFocalSegmenterV0
 
 # MODEL
 enc_dec_mapping = {
@@ -36,7 +37,8 @@ clf_loss = {
     "focal" : FocalClassifierV0,
     "cb" : CBClassifierV0,
     "cbfocal" : CBFocalClassifierV0,
-    "bsl" : BSLClassifierV0
+    "bsl" : BSLClassifierV0,
+    "gumfocal" : GumbelFocalClassifierV0
 }
 
 seg_loss = {
@@ -44,7 +46,8 @@ seg_loss = {
     "focal" : FocalSegmenterV0,
     "cb" : FocalSegmenterV0,
     "cbfocal" : CBFocalSegmenterV0,
-    "bsl" : BSLSegmenterV0
+    "bsl" : BSLSegmenterV0,
+    "gumfocal" : GumbelFocalSegmenterV0
 }
 
 

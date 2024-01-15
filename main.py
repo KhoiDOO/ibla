@@ -33,7 +33,7 @@ if __name__ == "__main__":
     parser.add_argument('--model', type=str, default='unet', choices=['unet', 'resnet18', 'base', 'resnet18_scratch'],
         help='backbone used in training')
     parser.add_argument('--loss', type=str, default='vanilla', 
-        choices=['vanilla', 'focal', 'cb', 'cbfocal', 'bsl'],
+        choices=['vanilla', 'focal', 'cb', 'cbfocal', 'bsl', 'gumfocal'],
         help='loss function used in training')
     parser.add_argument('--task', type=str, default='clf', required=True,
         choices=['clf', 'seg'],
@@ -61,12 +61,15 @@ if __name__ == "__main__":
     parser.add_argument('--lr', type=float, default=0.001,
         help='learning rate')
     
-    # VANILLA LOSS
-    # parser.add_argument('--log_type', type=str, default='log', choices=['log2', 'log10', 'log'])
-    
-    # FOCAL - CLASS-BALANCE FOCAL LOSS
+    # FOCAL - CLASS-BALANCE FOCAL LOSS - GUMBEL FOCAL LOSS
     parser.add_argument('--gamma', type=float, default=0, 
         help="gamma hyperparameter used in focal loss")
+    
+    # GUMBEL FOCAL LOSS
+    parser.add_argument('--gumbel_tau', type=float, default=1, 
+        help="temperature factor used for gumbel softmax")
+    parser.add_argument('--gumbel_hard', type=bool, default=True, 
+        help="toggle to use reparameterizaiton trick in gumbel softmax")
 
 
     args = parser.parse_args()

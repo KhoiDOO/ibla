@@ -10,3 +10,5 @@ from .class_balance_loss import CBClassifierV0, CBSegmenterV0
 from .cbfocal import CBFocalClassifierV0, CBFocalSegmenterV0
 
 from .bsl import BSLClassifierV0, BSLSegmenterV0
+
+from .gumbel_focal import GumbelFocalClassifierV0, GumbelFocalSegmenterV0
