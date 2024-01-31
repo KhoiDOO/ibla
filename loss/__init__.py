@@ -12,3 +12,4 @@ from .cbfocal import CBFocalClassifierV0, CBFocalSegmenterV0
 from .bsl import BSLClassifierV0, BSLSegmenterV0
 
 from .gumbel_focal import GumbelFocalClassifierV0, GumbelFocalSegmenterV0
+from .gumbel import GumbelClassifierV0, GumbelSegmenterV0

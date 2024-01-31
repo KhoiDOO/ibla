@@ -3,7 +3,7 @@ from metrics import miou, pixel_accuracy, depth_error, accuracy, depth_rel_error
 from loss import VanillaClassifierStableV0, VanillaSegmenterStableV0, CBClassifierV0, CBSegmenterV0, \
     FocalClassifierV0, FocalSegmenterV0, CBFocalClassifierV0, CBFocalSegmenterV0, \
         BSLClassifierV0, BSLSegmenterV0, \
-            GumbelFocalClassifierV0, GumbelFocalSegmenterV0
+            GumbelFocalClassifierV0, GumbelFocalSegmenterV0, GumbelSegmenterV0, GumbelClassifierV0
 
 # MODEL
 enc_dec_mapping = {
@@ -38,7 +38,8 @@ clf_loss = {
     "cb" : CBClassifierV0,
     "cbfocal" : CBFocalClassifierV0,
     "bsl" : BSLClassifierV0,
-    "gumfocal" : GumbelFocalClassifierV0
+    "gumfocal" : GumbelFocalClassifierV0,
+    "gum" : GumbelClassifierV0
 }
 
 seg_loss = {
@@ -47,7 +48,8 @@ seg_loss = {
     "cb" : FocalSegmenterV0,
     "cbfocal" : CBFocalSegmenterV0,
     "bsl" : BSLSegmenterV0,
-    "gumfocal" : GumbelFocalSegmenterV0
+    "gumfocal" : GumbelFocalSegmenterV0,
+    "gum" : GumbelSegmenterV0
 }
 
 
