@@ -52,6 +52,6 @@ class BSLSegmenterV0(VanillaClassifierStableV0):
         
         logits = self.act(class_scaled_pred)
 
-        entropy = logits * target
+        entropy = logits * _target
 
         return (-1 / (B * H * W)) * torch.sum(entropy)
