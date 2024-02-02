@@ -13,3 +13,5 @@ from .bsl import BSLClassifierV0, BSLSegmenterV0
 
 from .gumbel_focal import GumbelFocalClassifierV0, GumbelFocalSegmenterV0
 from .gumbel import GumbelClassifierV0, GumbelSegmenterV0
+
+from .hdlrw import HDLRWClassifierV0

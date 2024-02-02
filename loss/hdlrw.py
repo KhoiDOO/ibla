@@ -1,0 +1,86 @@
+import os, sys
+import torch
+from torch import nn
+from torch._tensor import Tensor 
+import torch.nn.functional as F
+
+from .vanilla_clf_stable import VanillaClassifierStableV0
+
+
+class DynamicArray:
+    def __init__(self, size = 2) -> None:
+        self.__storage = []
+        self.__size = size
+    
+    def append(self, x):
+        if len(self.__storage) < self.__size:
+            self.__storage.append(x)
+        else:
+            self.__storage = self.__storage[1:]
+            self.__storage.append(x)
+    
+    @property
+    def size(self):
+        return self.__size
+    
+    @property
+    def storage(self):
+        return self.__storage
+
+class HDLRWClassifierV0(VanillaClassifierStableV0):
+    def __init__(self, args) -> None:
+        super().__init__(args)
+
+        self.epoch = 0
+        self.train_loss_buffer = DynamicArray(size = args.mem_size)
+
+    def forward(self, pred, target) -> Tensor:
+
+        device = pred.device
+
+        cls_loss = {}
+
+        logits = self.act(pred)
+
+        B, C = tuple(logits.size())
+        
+        for b_logits, b_target in zip(logits, target):
+            if b_target.item() in cls_loss:
+                cls_loss[b_target.item()].append(b_logits[b_target.item()])
+            else:
+                cls_loss[b_target.item()] = [b_logits[b_target.item()]]
+        
+        sum_cls_loss = {
+            _cls : sum(cls_loss[_cls]) for _cls in cls_loss
+        }
+
+        backup_loss_dict = {
+            _cls : sum_cls_loss[_cls].item() for _cls in sum_cls_loss
+        }
+
+        self.train_loss_buffer.append(backup_loss_dict)
+
+        if self.epoch > 1:
+            self.epoch += 1
+            weighted_dict = {
+                _cls : self.train_loss_buffer.storage[-1][_cls] / self.train_loss_buffer.storage[-2][_cls] for _cls in backup_loss_dict
+            }
+
+            exp_weight_dict = {
+                _cls : torch.exp(weighted_dict[_cls]) for _cls in weighted_dict
+            }
+
+            exp_sum = sum(list(exp_weight_dict.values()))
+            softmax_weight_dict = {
+                _cls : C * exp_weight_dict[_cls] / exp_sum for _cls in exp_weight_dict
+            }
+
+            weighted_loss_dict = {
+                _cls : softmax_weight_dict[_cls] * sum_cls_loss[_cls] for _cls in softmax_weight_dict
+            }
+
+            return (-1 / B) * sum(list(weighted_loss_dict.values()))
+
+        else:
+            self.epoch += 1
+            return (-1 / B) * sum(list(sum_cls_loss.values()))
