@@ -49,19 +49,6 @@ class CustomBusi(Dataset):
         
         print("Data Set Setting Up")
         print(len(self._images),len(self._segs))
-        
-    @staticmethod 
-    def process_mask(x):
-        uniques = torch.unique(x, sorted = True)
-        if uniques.shape[0] > 3:
-            x[x == 0] = uniques[2]
-            uniques = torch.unique(x, sorted = True)
-        for i, v in enumerate(uniques):
-            x[x == v] = i
-        
-        x = x.to(dtype=torch.long)
-        # onehot = F.one_hot(x.squeeze(1), 1).permute(0, 3, 1, 2)[0].float()
-        return x
 
     def __len__(self):
         return len(self._images)
@@ -85,7 +72,9 @@ class CustomBusi(Dataset):
         torch_img = torch.from_numpy(transformed_img).permute(-1, 0, 1).float()
         torch_mask = torch.from_numpy(transformed_mask).unsqueeze(-1).permute(-1, 0, 1).float()
 
-        return torch_img, self.process_mask(torch_mask)
+        torch_mask[torch_mask > 1] = 1
+
+        return torch_img, torch_mask
 
     @property
     def mode(self):

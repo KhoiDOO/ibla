@@ -152,51 +152,54 @@ def train_func(args):
                 log_interface(key=f"test/{metric_key}", value=metric_value)
 
     # finalization
-    if args.task == "seg":
-        perform_dir = args.exp_dir + f"/{args.task}"
-        if not os.path.exists(perform_dir):
-            os.mkdir(perform_dir)
-        
-        img_dir = args.exp_dir + f"/img"
-        if not os.path.exists(img_dir):
-            os.mkdir(img_dir)
-        
-        for idx in range(10):
-            img, target = test_ds[idx]
-            img = img.unsqueeze(0).to(device)
+    model.eval()
+    with torch.no_grad():           
+        if args.task == "seg":
+            perform_dir = args.exp_dir + f"/{args.task}"
+            if not os.path.exists(perform_dir):
+                os.mkdir(perform_dir)
             
-            pred = model(img)
+            img_dir = args.exp_dir + f"/img"
+            if not os.path.exists(img_dir):
+                os.mkdir(img_dir)
             
-            pred_task_np = torch.argmax(pred[0], dim=0).cpu().unsqueeze(0).permute(1, -1, 0).numpy()
-            lble_task_np = torch.argmax(target, dim=0).cpu().unsqueeze(0).permute(1, -1, 0).numpy()
-
-            print(np.unique(lble_task_np))
-
-            pred_path = perform_dir + f"/pred_{idx}.pdf"
-            lble_path = perform_dir + f"/lble_{idx}.pdf"                
-
-            for _img, _path in zip([pred_task_np, lble_task_np], [pred_path, lble_path]):
-                plt.figure()
+            for idx in range(10):
+                img, target = test_ds[idx]
+                img = img.unsqueeze(0).to(device)
                 
-                plt.imshow(_img)
+                pred = model(img)
+                if args.seg_n_classes > 1:
+                    pred_task_np = torch.argmax(pred[0], dim=0).cpu().unsqueeze(0).permute(1, -1, 0).numpy()
+                    lble_task_np = torch.argmax(target, dim=0).cpu().unsqueeze(0).permute(1, -1, 0).numpy()
+                else:
+                    pred_task_np = pred[0].cpu().permute(1, -1, 0).numpy()
+                    lble_task_np = target.cpu().permute(1, -1, 0).numpy()
+
+                pred_path = perform_dir + f"/pred_{idx}.pdf"
+                lble_path = perform_dir + f"/lble_{idx}.pdf"                
+
+                for _img, _path in zip([pred_task_np, lble_task_np], [pred_path, lble_path]):
+                    plt.figure()
+                    
+                    plt.imshow(_img)
+                    plt.axis('off')
+                    plt.savefig(_path, format='pdf', dpi=300)
+
+                    plt.close()
+                
+                if args.ds in ['oxford']:
+                    img_np = invnorm(img[0]).cpu().permute(1, -1, 0).numpy()
+                if args.ds in ['busi']:
+                    img_np = invnorm255(img[0]).cpu().permute(1, -1, 0).numpy()
+                    
+                path = img_dir + f"/{idx}.pdf"
+                plt.figure()
+
+                plt.imshow(img_np)
                 plt.axis('off')
-                plt.savefig(_path, format='pdf', dpi=300)
+                plt.savefig(path, format='pdf', dpi=300, pad_inches=0)
 
                 plt.close()
-            
-            if args.ds in ['oxford']:
-                img_np = invnorm(img[0]).cpu().permute(1, -1, 0).numpy()
-            if args.ds in ['busi']:
-                img_np = invnorm255(img[0]).cpu().permute(1, -1, 0).numpy()
-                
-            path = img_dir + f"/{idx}.pdf"
-            plt.figure()
-
-            plt.imshow(img_np)
-            plt.axis('off')
-            plt.savefig(path, format='pdf', dpi=300, pad_inches=0)
-
-            plt.close()
     
     if args.verbose:
         print("Ending")
