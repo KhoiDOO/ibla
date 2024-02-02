@@ -1,4 +1,4 @@
-from model import Unet, SegNet, RUnet, AttUnet,\
+from model import Unet, SegNet, RUnet, AttUnet, RATTUnet,\
     Base, get_resnet18, get_resnet18_scratch
 from metrics import miou, pixel_accuracy, accuracy, depth_rel_error, depth_abs_error
 from loss import VanillaClassifierStableV0, VanillaSegmenterStableV0, CBClassifierV0, CBSegmenterV0, \
@@ -11,7 +11,8 @@ enc_dec_mapping = {
     'unet' : Unet,
     'segnet' : SegNet,
     'runet' : RUnet,
-    'attunet' : AttUnet
+    'attunet' : AttUnet,
+    'rattunet' : RATTUnet
 }
 
 clf_model_mapping = {
@@ -66,10 +67,6 @@ mapping = {
             'metrics' : seg_metrics_mapping,
             'loss' : seg_loss
         },
-        # 'depth' : {
-        #     'model' : enc_dec_mapping,
-        #     'metrics' :depth_metrics_mapping
-        # }
     },
     'oxford' : {
         'seg' : {
