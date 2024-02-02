@@ -6,6 +6,7 @@ from rich.progress import track
 import numpy as np
 import argparse
 import glob
+import glob
 import torch
 from torch.utils.data import Dataset, DataLoader
 import torchvision as tv
@@ -39,12 +40,13 @@ class CustomBusi(Dataset):
 
         self.norm = A.Compose(
             [
-                A.Normalize(max_value=255),
+                A.ToFloat(max_value=255),
             ]
         )
 
         self._images = sorted(glob(self.root+ "/images/*"))
         self._segs = sorted(glob(self.root+ "/masks/*_mask.png"))
+        
         
         print("Data Set Setting Up")
         print(len(self._images),len(self._segs))
