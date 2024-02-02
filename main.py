@@ -31,7 +31,7 @@ if __name__ == "__main__":
     parser.add_argument('--idx', type=int, default=0,
         help='device index used in training')
     parser.add_argument('--model', type=str, default='unet', choices=[
-        'unet', 'segnet', 'runet', 'attunet', 'rattunet',
+        'unet', 'segnet', 'runet', 'attunet', 'rattunet', 'nestunet',
         'resnet18', 'base', 'resnet18_scratch'],
         help='backbone used in training')
     parser.add_argument('--loss', type=str, default='vanilla', 
