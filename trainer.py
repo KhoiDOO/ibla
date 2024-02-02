@@ -3,6 +3,7 @@ from rich.progress import track
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+plt.tight_layout()
 
 import torch
 from torch import nn
@@ -183,11 +184,11 @@ def train_func(args):
                     
                     plt.imshow(_img)
                     plt.axis('off')
-                    plt.savefig(_path, format='pdf', dpi=300)
+                    plt.savefig(_path, format='pdf', dpi=300, bbox_inches='tight', pad_inches = 0)
 
                     plt.close()
                 
-                if args.ds in ['oxford']:
+                if args.ds in ['oxford', 'vocalfolds']:
                     img_np = invnorm(img[0]).cpu().permute(1, -1, 0).numpy()
                 if args.ds in ['busi']:
                     img_np = invnorm255(img[0]).cpu().permute(1, -1, 0).numpy()
@@ -197,7 +198,8 @@ def train_func(args):
 
                 plt.imshow(img_np)
                 plt.axis('off')
-                plt.savefig(path, format='pdf', dpi=300, pad_inches=0)
+
+                plt.savefig(path, format='pdf', dpi=300, bbox_inches='tight', pad_inches = 0)
 
                 plt.close()
     
