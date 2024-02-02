@@ -1,1 +1,1 @@
-from .runet import runet
+from .runet import RUnet

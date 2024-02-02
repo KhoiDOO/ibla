@@ -1,5 +1,6 @@
-from model import Unet, SegNet, Base, get_resnet18, get_resnet18_scratch
-from metrics import miou, pixel_accuracy, depth_error, accuracy, depth_rel_error, depth_abs_error
+from model import Unet, SegNet, RUnet, \
+    Base, get_resnet18, get_resnet18_scratch
+from metrics import miou, pixel_accuracy, accuracy, depth_rel_error, depth_abs_error
 from loss import VanillaClassifierStableV0, VanillaSegmenterStableV0, CBClassifierV0, CBSegmenterV0, \
     FocalClassifierV0, FocalSegmenterV0, CBFocalClassifierV0, CBFocalSegmenterV0, \
         BSLClassifierV0, BSLSegmenterV0, \
@@ -8,7 +9,8 @@ from loss import VanillaClassifierStableV0, VanillaSegmenterStableV0, CBClassifi
 # MODEL
 enc_dec_mapping = {
     'unet' : Unet,
-    'segnet' : SegNet
+    'segnet' : SegNet,
+    'runet' : RUnet
 }
 
 clf_model_mapping = {

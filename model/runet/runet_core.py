@@ -10,9 +10,9 @@ class Recurrent_block(nn.Module):
         self.t = t
         self.out_ch = out_ch
         self.conv = nn.Sequential(
-            nn.Conv2d(out_ch, out_ch, kernel_size = 3, stride = 3, padding = 1, bias = True),
+            nn.Conv2d(out_ch, out_ch, kernel_size = 3, stride = 1, padding = 1, bias = True),
             nn.BatchNorm2d(out_ch),
-            nn.ReLu(inplace = True)
+            nn.ReLU(inplace = True)
         )
 
     def forward(self, x):
@@ -28,25 +28,25 @@ class RRCNN_block(nn.Module):
 
         self.RCNN = nn.Sequential(
             Recurrent_block(out_ch, t = t),
-            Recurrent_block(out_ch, t =t)
+            Recurrent_block(out_ch, t = t)
         )
-        self.Conv = nn.Conv2d(in_ch, out_ch, kernel_size = 1, stride = 1, padding = 0)
+        self.conv = nn.Conv2d(in_ch, out_ch, kernel_size = 1, stride = 1, padding = 0)
 
     def forward(self, x):
-        x1 = self.Conv(x)
+        x1 = self.conv(x)
         x2 = self.RCNN(x1)
         out = x1 + x2
         return out
     
-class up_conv(nn.Module):
+class UpConv(nn.Module):
     def __init__(self, in_ch, out_ch):
-        super(up_conv, self).__init__()
+        super(UpConv, self).__init__()
 
         self.up = nn.Sequential(
             nn.Upsample(scale_factor = 2),
             nn.Conv2d(in_ch, out_ch, kernel_size = 3, stride = 1, padding = 1, bias = True),
             nn.BatchNorm2d(out_ch),
-            nn.ReLu(inplace = True)
+            nn.ReLU(inplace = True)
         )
 
     def forward(self, x):
