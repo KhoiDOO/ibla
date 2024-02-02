@@ -170,20 +170,24 @@ def train_func(args):
             pred_task_np = torch.argmax(pred[0], dim=0).cpu().unsqueeze(0).permute(1, -1, 0).numpy()
             lble_task_np = torch.argmax(target, dim=0).cpu().unsqueeze(0).permute(1, -1, 0).numpy()
 
+            print(np.unique(lble_task_np))
+
             pred_path = perform_dir + f"/pred_{idx}.pdf"
             lble_path = perform_dir + f"/lble_{idx}.pdf"                
 
             for _img, _path in zip([pred_task_np, lble_task_np], [pred_path, lble_path]):
                 plt.figure()
-
+                
                 plt.imshow(_img)
                 plt.axis('off')
                 plt.savefig(_path, format='pdf', dpi=300)
 
                 plt.close()
             
-            if args.ds == 'oxford':
+            if args.ds in ['oxford']:
                 img_np = invnorm(img[0]).cpu().permute(1, -1, 0).numpy()
+            if args.ds in ['busi']:
+                img_np = invnorm255(img[0]).cpu().permute(1, -1, 0).numpy()
                 
             path = img_dir + f"/{idx}.pdf"
             plt.figure()
