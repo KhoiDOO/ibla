@@ -3,9 +3,9 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 
-class Attention_block(nn.Module):
+class AttentionBlock(nn.Module):
     def __init__(self, F_g, F_l, F_int):
-        super(Attention_block, self).__init__()
+        super(AttentionBlock, self).__init__()
 
         self.W_g = nn.Sequential(
             nn.Conv2d(F_l, F_int, kernel_size=1, stride=1, padding=0, bias=True),
@@ -33,9 +33,9 @@ class Attention_block(nn.Module):
         out = x * psi
         return out
     
-class conv_block(nn.Module):
+class ConvBlock(nn.Module):
     def __init__(self, in_ch, out_ch):
-        super(conv_block, self).__init__()
+        super(ConvBlock, self).__init__()
         
         self.conv = nn.Sequential(
             nn.Conv2d(in_ch, out_ch, kernel_size=3, stride=1, padding=1, bias=True),
@@ -51,9 +51,10 @@ class conv_block(nn.Module):
         return x
 
 
-class up_conv(nn.Module):
+
+class UpConv(nn.Module):
     def __init__(self, in_ch, out_ch):
-        super(up_conv, self).__init__()
+        super(UpConv, self).__init__()
         self.up = nn.Sequential(
             nn.Upsample(scale_factor=2),
             nn.Conv2d(in_ch, out_ch, kernel_size=3, stride=1, padding=1, bias=True),
