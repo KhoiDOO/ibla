@@ -82,6 +82,23 @@ mapping = {
             'loss' : seg_loss
         }
     },
+    'vocalfolds' : {
+        'seg' : {
+            'model' : enc_dec_mapping,
+            'metrics' : seg_metrics_mapping,
+            'loss' : seg_loss
+        },
+    },
+    'busi' : {
+        'seg' : {
+            'model' : enc_dec_mapping,
+            'metrics' : seg_metrics_mapping,
+            'loss' : seg_loss
+        },
+    },
+
+
+
     'cifar10' : {
         'clf' : {
             'model' : clf_model_mapping,
@@ -110,11 +127,4 @@ mapping = {
             'loss' : clf_loss
         }
     },
-    'vocalfolds' : {
-        'seg' : {
-            'model' : enc_dec_mapping,
-            'metrics' : seg_metrics_mapping,
-            'loss' : seg_loss
-        },
-    }
 }

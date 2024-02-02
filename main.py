@@ -7,7 +7,7 @@ if __name__ == "__main__":
 
     # DATASET
     parser.add_argument('--ds', type=str, required=True, choices = [
-        'oxford', 'nyu', 'celeb', 'city', 'cifar10lt', 'cifar100lt', 'cifar10', 'cifar100','vocalfolds'
+        'oxford', 'nyu', 'celeb', 'city', 'cifar10lt', 'cifar100lt', 'cifar10', 'cifar100','vocalfolds', 'busi'
         ],
         help='dataset used in training')
     parser.add_argument('--bs', type=int, required=True, default=64,
