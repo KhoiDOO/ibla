@@ -35,7 +35,7 @@ if __name__ == "__main__":
         'resnet18', 'base', 'resnet18_scratch'],
         help='backbone used in training')
     parser.add_argument('--loss', type=str, default='vanilla', 
-        choices=['vanilla', 'focal', 'cb', 'cbfocal', 'bsl', 'gumfocal', 'gum'],
+        choices=['vanilla', 'focal', 'cb', 'cbfocal', 'bsl', 'gumfocal', 'gum', 'hdlrw'],
         help='loss function used in training')
     parser.add_argument('--task', type=str, default='clf', required=True,
         choices=['clf', 'seg'],
@@ -72,6 +72,10 @@ if __name__ == "__main__":
         help="temperature factor used for gumbel softmax")
     parser.add_argument('--gumbel_hard', type=bool, default=True, 
         help="toggle to use reparameterizaiton trick in gumbel softmax")
+
+    # HDLRW
+    parser.add_argument('--mem_size', type=int, default=2, 
+        help="size memory in loss function")
 
 
     args = parser.parse_args()
