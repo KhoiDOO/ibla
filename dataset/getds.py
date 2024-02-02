@@ -209,10 +209,11 @@ def get_ds_cifar(args):
     return (train_ds, valid_ds, test_ds, train_dl, valid_dl, test_dl), args
 
 def get_ds_vocalfolds(args):
-    train_ds = Customvocalfolds(split = 'trainval', args=args)
-    valid_ds = Customvocalfolds(split = 'valid', args=args)
-    test_ds = Customvocalfolds(split = 'test', args=args)
+    core_ds = Customvocalfolds(args=args, split='train')
 
+    train_ds, valid_ds = random_split(core_ds, [0.9, 0.1])
+    valid_ds.mode = 'test'
+    test_ds = valid_ds
 
     train_dl = DataLoader(train_ds, batch_size=args.bs, shuffle=True, pin_memory=args.pinmem, num_workers=args.wk)
     valid_dl = DataLoader(valid_ds, batch_size=args.bs, shuffle=True, pin_memory=args.pinmem, num_workers=args.wk)
