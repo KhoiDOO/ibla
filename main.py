@@ -30,7 +30,9 @@ if __name__ == "__main__":
     # TRAINING GENERAL SETTINGS
     parser.add_argument('--idx', type=int, default=0,
         help='device index used in training')
-    parser.add_argument('--model', type=str, default='unet', choices=['unet', 'resnet18', 'base', 'resnet18_scratch'],
+    parser.add_argument('--model', type=str, default='unet', choices=[
+        'unet', 'segnet',
+        'resnet18', 'base', 'resnet18_scratch'],
         help='backbone used in training')
     parser.add_argument('--loss', type=str, default='vanilla', 
         choices=['vanilla', 'focal', 'cb', 'cbfocal', 'bsl', 'gumfocal', 'gum'],

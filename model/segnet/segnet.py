@@ -4,29 +4,9 @@ import torch
 from torch import nn
 from .segnet_core import *
 
-
-class Core(nn.Module):
+class SegNet(nn.Module):
     def __init__(self, args):
-        super().__init__()
-        self.args = args
-        #self.task_num = args.task_num
-
-        self.encoder = None
-        self.decoder = None
-    
-    def forward(self, x):
-        raise NotImplementedError()
-    
-    def get_share_params(self):
-        return self.encoder.parameters()
-
-    def zero_grad_share_params(self):
-        self.encoder.zero_grad()
-
-
-class SegNet(Core):
-    def __init__(self, args):
-        super(SegNet, self).__init__(args)
+        super(SegNet, self).__init__()
         self.seg_n_classes = args.seg_n_classes
         self.init_ch = args.init_ch
 
@@ -59,4 +39,4 @@ class SegNet(Core):
         x = self.decoder[2](x, mp2_indices, output_size=shape2)
         masks = self.decoder[3](x, mp1_indices, output_size=shape1)
 
-        return masks   
+        return masks
