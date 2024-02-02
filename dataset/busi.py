@@ -5,8 +5,7 @@ from PIL import Image
 from rich.progress import track
 import numpy as np
 import argparse
-import matplotlib.pyplot as plt
-
+import glob
 import torch
 from torch.utils.data import Dataset, DataLoader
 import torchvision as tv
@@ -14,12 +13,14 @@ import torch.nn.functional as F
 from torch import Tensor
 import albumentations as A
 
-
-_root = "/".join(__file__.split("/")) + "/source/BUSI"
+_root = "/".join(__file__.split("/")[:-1]) + "/source/BUSI"
 
 class CustomBusi(Dataset):
     def __init__(self, root:str = _root, split='train', args:argparse = None):
         self.root = root
+        self.args = args
+        if self.args is None:
+            raise ValueError("args cannot be None")
         self._split = split
         self.__mode = "train" if split == 'train' else 'test'
         
@@ -38,15 +39,15 @@ class CustomBusi(Dataset):
 
         self.norm = A.Compose(
             [
-                A.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5)),
+                A.Normalize(max_value=255),
             ]
         )
 
         self._images = sorted(glob(self.root+ "/images/*"))
         self._segs = sorted(glob(self.root+ "/masks/*_mask.png"))
-
+        
         print("Data Set Setting Up")
-
+        print(len(self._images),len(self._segs))
         
     @staticmethod 
     def process_mask(x):
@@ -58,8 +59,8 @@ class CustomBusi(Dataset):
             x[x == v] = i
         
         x = x.to(dtype=torch.long)
-        onehot = F.one_hot(x.squeeze(1), 3).permute(0, 3, 1, 2)[0].float()
-        return onehot
+        # onehot = F.one_hot(x.squeeze(1), 1).permute(0, 3, 1, 2)[0].float()
+        return x
 
     def __len__(self):
         return len(self._images)
