@@ -5,8 +5,7 @@ from PIL import Image
 from rich.progress import track
 import numpy as np
 import argparse
-import glob
-import glob
+from glob import glob
 import torch
 from torch.utils.data import Dataset, DataLoader
 import torchvision as tv
