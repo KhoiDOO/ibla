@@ -36,8 +36,6 @@ class HDLRWClassifierV0(VanillaClassifierStableV0):
 
     def forward(self, pred, target) -> Tensor:
 
-        device = pred.device
-
         cls_loss = {}
 
         logits = self.act(pred)
@@ -62,9 +60,20 @@ class HDLRWClassifierV0(VanillaClassifierStableV0):
 
         if self.epoch > 1:
             self.epoch += 1
-            weighted_dict = {
-                _cls : self.train_loss_buffer.storage[-1][_cls] / self.train_loss_buffer.storage[-2][_cls] for _cls in backup_loss_dict
-            }
+            weighted_dict = {}
+
+            for _cls in backup_loss_dict:
+                if _cls in self.train_loss_buffer.storage[-1]:
+                    nom = self.train_loss_buffer.storage[-1][_cls]
+                else:
+                    nom = 1
+
+                if _cls in self.train_loss_buffer.storage[-2]:
+                    dom = self.train_loss_buffer.storage[-2][_cls]
+                else:
+                    dom = 1
+                
+                weighted_dict[_cls] = torch.Tensor([nom / dom]).to(pred.device)
 
             exp_weight_dict = {
                 _cls : torch.exp(weighted_dict[_cls]) for _cls in weighted_dict
