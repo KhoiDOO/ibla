@@ -1,4 +1,4 @@
-from .vanilla_clf_stable import VanillaClassifierStableV0
+from .vanilla_clf_stable import VanillaClassifierStableV0, BinaryVanillaClassifierStableV0
 import torch
 
 class VanillaSegmenterStableV0(VanillaClassifierStableV0):
@@ -11,6 +11,19 @@ class VanillaSegmenterStableV0(VanillaClassifierStableV0):
         B, C, H, W = tuple(logits.size())
 
         entropy = logits * target
+
+        return (-1 / (B * H * W)) * torch.sum(entropy)
+
+class BinaryVanillaSegmenterStableV0(BinaryVanillaClassifierStableV0):
+    def __init__(self, args) -> None:
+        super().__init__(args)
+
+    def forward(self, pred, target) -> torch.Tensor:
+        logits = self.act(pred)
+
+        B, C, H, W = tuple(logits.size())
+
+        entropy = target * logits + (1 - target) * (1 - logits)
 
         return (-1 / (B * H * W)) * torch.sum(entropy)
 

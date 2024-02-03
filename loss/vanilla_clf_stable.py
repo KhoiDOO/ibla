@@ -21,6 +21,24 @@ class VanillaClassifierStableV0(nn.Module):
         return (-1 / B) * torch.sum(entropy)
 
 
+class BinaryVanillaClassifierStableV0(nn.Module):
+    def __init__(self, args) -> None:
+        super().__init__()
+
+        self.args = args
+        self.act = nn.LogSigmoid(dim = 1)
+
+    def forward(self, pred, target) -> torch.Tensor:
+
+        logits = self.act(pred)
+
+        B, C = tuple(logits.size())
+
+        entropy = target * logits + (1 - target) * (1 - logits)
+
+        return (-1 / B) * torch.sum(entropy)
+
+
 class VanillaClassifierStableV1(VanillaClassifierStableV0):
     def __init__(self, args) -> None:
         super().__init__(args=args)
