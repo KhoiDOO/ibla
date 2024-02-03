@@ -21,11 +21,9 @@ class BinaryVanillaSegmenterStableV0(BinaryVanillaClassifierStableV0):
     def forward(self, pred, target) -> torch.Tensor:
         logits = self.act(pred)
 
-        B, C, H, W = tuple(logits.size())
+        entropy = -(target * logits.clamp(min=1e-12).log() + (1 - target) * (1 - logits).clamp(min=1e-12).log())
 
-        entropy = target * torch.log(logits) + (1 - target) * torch.log(1 - logits)
-
-        return (-1) * torch.mean(entropy)
+        return torch.mean(entropy)
 
 class VanillaSegmenterStableV1(VanillaSegmenterStableV0):
     def __init__(self, args) -> None:

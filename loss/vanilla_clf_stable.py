@@ -32,11 +32,9 @@ class BinaryVanillaClassifierStableV0(nn.Module):
 
         logits = self.act(pred)
 
-        B, C = tuple(logits.size())
+        entropy = -(target * logits.clamp(min=1e-12).log() + (1 - target) * (1 - logits).clamp(min=1e-12).log())
 
-        entropy = target * torch.log(logits) + (1 - target) * torch.log(1 - logits)
-
-        return -torch.sum(entropy)
+        return torch.mean(entropy)
 
 
 class VanillaClassifierStableV1(VanillaClassifierStableV0):
