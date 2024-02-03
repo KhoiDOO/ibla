@@ -27,7 +27,7 @@ class CBFocalClassifierV0(VanillaClassifierStableV0):
                 cls_loss[target_idx] = [_b_logits * torch.pow(1 - _b_logits, self.gamma)]
         
         sum_cls_loss = {
-            _cls : ((1 - beta)/(1 - beta ** len(cls_loss[_cls]))) * sum(cls_loss[_cls]) for _cls in cls_loss
+            _cls : ((1 - beta)/(1 - beta ** len(cls_loss[_cls] + 1e-6))) * sum(cls_loss[_cls]) for _cls in cls_loss
         }
 
         return (-1 / B) * sum(list(sum_cls_loss.values()))
@@ -59,7 +59,7 @@ class CBFocalSegmenterV0(VanillaClassifierStableV0):
             
             N_c, _ = tuple(c_target.shape)
 
-            entropy = ((1 - beta)/(1 - beta ** N_c)) * torch.sum(torch.pow(1 - c_logits, self.gamma) * c_logits * c_target)
+            entropy = ((1 - beta)/(1 - beta ** N_c + 1e-6)) * torch.sum(torch.pow(1 - c_logits, self.gamma) * c_logits * c_target)
 
             cls_loss[cidx] = entropy
 

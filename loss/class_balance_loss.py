@@ -23,7 +23,7 @@ class CBClassifierV0(VanillaClassifierStableV0):
                 cls_loss[b_target.item()] = [b_logits[b_target.item()]]
         
         sum_cls_loss = {
-            _cls : ((1 - beta)/(1 - beta ** len(cls_loss[_cls]))) * sum(cls_loss[_cls]) for _cls in cls_loss
+            _cls : ((1 - beta)/(1 - beta ** len(cls_loss[_cls] + 1e-6))) * sum(cls_loss[_cls]) for _cls in cls_loss
         }
 
         return (-1 / B) * sum(list(sum_cls_loss.values()))
@@ -53,7 +53,7 @@ class CBSegmenterV0(VanillaClassifierStableV0):
             
             N_c, _ = tuple(c_target.shape)
 
-            entropy = ((1 - beta)/(1 - beta ** N_c)) * torch.sum(c_logits * c_target)
+            entropy = ((1 - beta)/(1 - beta ** N_c + 1e-6)) * torch.sum(c_logits * c_target)
 
             cls_loss[cidx] = entropy
 
