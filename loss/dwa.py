@@ -30,7 +30,6 @@ class DWASegmenterV0(VanillaClassifierStableV0):
         class_entropy = torch.sum(entropy, axis = [0, 2, 3]).clamp(0.00001)
 
         if self.sample_count >= self.args.num_train_sample:
-            print(self.sample_count, self.args.num_train_sample)
             self.train_loss_buffer[:, self.epoch] = class_entropy.clone().tolist()
             self.epoch += 1
             self.sample_count = 0
