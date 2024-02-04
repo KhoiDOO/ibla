@@ -131,6 +131,9 @@ def train_func(args):
         
         save_path = args.exp_dir + f"/last.pt"
         torch.save(save_dict, save_path)
+
+        if args.loss == 'dwa':
+            train_loss_fn.train_loss_buffer
     
     
     log_interface.reset()
