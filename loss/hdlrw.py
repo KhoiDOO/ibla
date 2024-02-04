@@ -115,10 +115,10 @@ class HDLRWSegmenterV0(VanillaClassifierStableV0):
         self.train_loss_buffer[:, self.epoch] = class_entropy.clone().tolist()
 
         if self.epoch > 1:
-            w_i = torch.Tensor(self.train_loss_buffer[:, self.epoch-1] / self.train_loss_buffer[:, self.epoch-2]).to(self.device)
+            w_i = torch.Tensor(self.train_loss_buffer[:, self.epoch-1] / self.train_loss_buffer[:, self.epoch-2]).to(pred.device)
             batch_weight = self.args.seg_n_classes * F.softmax(w_i/self.args.T, dim=-1)
             weght_entropy = class_entropy * batch_weight
-            loss = (-1 / (B * H * W)) * torch.sum(class_entropy)
+            loss = (-1 / (B * H * W)) * torch.sum(weght_entropy)
         else:
             loss = (-1 / (B * H * W)) * torch.sum(class_entropy)
 
