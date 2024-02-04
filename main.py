@@ -67,7 +67,7 @@ if __name__ == "__main__":
     parser.add_argument('--gamma', type=float, default=0, 
         help="gamma hyperparameter used in focal loss")
     
-    # GUMBEL FOCAL LOSS
+    # GUMBEL - GUMBEL FOCAL LOSS - HDLRW
     parser.add_argument('--gumbel_tau', type=float, default=1, 
         help="temperature factor used for gumbel softmax")
     parser.add_argument('--gumbel_hard', type=bool, default=True, 
