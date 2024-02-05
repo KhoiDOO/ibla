@@ -4,7 +4,9 @@ from model import Unet, SegNet, RUnet, AttUnet, RATTUnet, NestedUNet,\
 from metrics import miou, pixel_accuracy, accuracy, depth_rel_error, depth_abs_error
 
 from loss import \
-    VanillaClassifierStableV0, VanillaSegmenterStableV0, CBClassifierV0, CBSegmenterV0, \
+    VanillaClassifierStableV0, VanillaSegmenterStableV0, VanillaClassifierStableV1, VanillaClassifierStableV2, \
+    VanillaSegmenterStableV1, \
+    CBClassifierV0, CBSegmenterV0, \
     FocalClassifierV0, FocalSegmenterV0, CBFocalClassifierV0, CBFocalSegmenterV0, \
     BSLClassifierV0, BSLSegmenterV0, \
     GumbelFocalClassifierV0, GumbelFocalSegmenterV0, GumbelSegmenterV0, GumbelClassifierV0, \
@@ -56,6 +58,7 @@ clf_loss = {
 
 seg_loss = {
     "vanilla" : VanillaSegmenterStableV0,
+    "vanilla_v1" : VanillaSegmenterStableV1,
     "focal" : FocalSegmenterV0,
     "cb" : CBSegmenterV0,
     "cbfocal" : CBFocalSegmenterV0,
