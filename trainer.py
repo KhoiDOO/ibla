@@ -1,6 +1,5 @@
 import os, sys
 from rich.progress import track
-import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 plt.tight_layout()
