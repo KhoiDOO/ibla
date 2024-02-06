@@ -123,6 +123,7 @@ class DWASegmenterV2(DWASegmenterV0):
             self.train_loss_buffer[:, self.epoch] = losses.detach().clone().tolist()
             self.epoch += 1
             self.sample_count = 0
+            
         else:
             self.sample_count += B
         
