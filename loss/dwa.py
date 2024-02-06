@@ -16,9 +16,35 @@ class DWAClassifierV0(VanillaClassifierStableV0):
         self.sample_count = 0
     
     def forward(self, pred: Tensor, target: Tensor) -> Tensor:
-        logits = self.act(pred) # (B, C)
+        losses = torch.zeros(self.args.seg_n_classes).to(pred.device)
+        
+        B, C = tuple(pred.size())
+        
+        for cidx in range(C):
+            c_pred = pred[target[:, cidx] == 1]
+            c_target = target[target[:, cidx] == 1]
 
-        losses = torch.zeros(self.args.seg_n_classes).to(logits.device)
+            c_loss = self.loss_fn(c_pred, c_target)
+
+            losses[cidx] = c_loss
+
+        if self.sample_count >= self.args.num_train_sample:
+            self.train_loss_buffer[:, self.epoch] = losses.detach().clone().tolist()
+            self.epoch += 1
+            self.sample_count = 0
+            
+        else:
+            self.sample_count += B
+        
+        if self.epoch > 1:
+            w_i = torch.Tensor(self.train_loss_buffer[:, self.epoch-1] / self.train_loss_buffer[:, self.epoch-2]).to(pred.device)
+            batch_weight = F.softmax(w_i/self.args.gumbel_tau, dim=-1)
+        else:
+            batch_weight = torch.ones_like(losses).to(pred.device)
+
+        loss = torch.mul(losses, batch_weight).sum()
+
+        return loss
 
         
 

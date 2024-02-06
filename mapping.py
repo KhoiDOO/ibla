@@ -53,6 +53,7 @@ clf_loss = {
     "bsl" : BSLClassifierV0,
     "gumfocal" : GumbelFocalClassifierV0,
     "gum" : GumbelClassifierV0,
+    "dwa" : DWAClassifierV0
 }
 
 seg_loss = {
