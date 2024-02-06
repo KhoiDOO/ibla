@@ -1,5 +1,6 @@
 from .vanilla_clf_stable import VanillaClassifierStableV0, BinaryVanillaClassifierStableV0
 import torch
+from torch import nn
 
 class VanillaSegmenterStableV0(VanillaClassifierStableV0):
     def __init__(self, args) -> None:
@@ -8,7 +9,7 @@ class VanillaSegmenterStableV0(VanillaClassifierStableV0):
     def forward(self, pred, target) -> torch.Tensor:
         logits = self.act(pred)
 
-        B, C, H, W = tuple(logits.size())
+        B, _, H, W = tuple(logits.size())
 
         entropy = logits * target
 
@@ -49,3 +50,28 @@ class VanillaSegmenterStableV1(VanillaSegmenterStableV0):
             cls_loss[cidx] = entropy
 
         return (-1 / (B * H * W)) * sum(list(cls_loss.values()))
+    
+class VanillaSegmenterStableV2(VanillaSegmenterStableV0):
+    def __init__(self, args) -> None:
+        super().__init__(args)
+
+        self.loss_fn = nn.BCEWithLogitsLoss()
+    
+    def forward(self, pred, target):
+        losses = torch.zeros(self.args.seg_n_classes).to(pred.device)
+
+        _, C, _, _ = tuple(pred.size())
+
+        for cidx in range(C):
+            c_pred = pred[:, cidx]
+            c_target = target[:, cidx]
+
+            c_loss = self.loss_fn(c_pred, c_target)
+
+            losses[cidx] = c_loss
+        
+        batch_weight = torch.ones_like(losses).to(pred.device)
+        
+        loss = torch.mul(losses, batch_weight).sum()
+
+        return loss
