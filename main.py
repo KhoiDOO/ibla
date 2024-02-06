@@ -77,6 +77,14 @@ if __name__ == "__main__":
     parser.add_argument('--mem_size', type=int, default=2, 
         help="size memory in loss function")
 
+    # EQ 
+    parser.add_argument('--eq_gamma', type=float, default=12.0, 
+        help="variance in equalization loss")
+    parser.add_argument('--eq_mu', type=float, default=0.8, 
+        help="mean in equalization loss")
+    parser.add_argument('--eq_alpha', type=float, default=4.0, 
+        help="alpha hyperparameter in equalization loss")
+
 
     args = parser.parse_args()
 
