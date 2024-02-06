@@ -12,11 +12,11 @@ class DWAClassifierV0(VanillaClassifierStableV0):
         super().__init__(args)
 
         self.epoch = 0
-        self.train_loss_buffer = np.zeros([self.args.seg_n_classes, self.args.epochs])
+        self.train_loss_buffer = np.zeros([self.args.n_classes, self.args.epochs])
         self.sample_count = 0
     
     def forward(self, pred: Tensor, target: Tensor) -> Tensor:
-        losses = torch.zeros(self.args.seg_n_classes).to(pred.device)
+        losses = torch.zeros(self.args.n_classes).to(pred.device)
         
         B, C = tuple(pred.size())
         
