@@ -14,15 +14,18 @@ class DWAClassifierV0(VanillaClassifierStableV0):
         self.epoch = 0
         self.train_loss_buffer = np.zeros([self.args.n_classes, self.args.epochs])
         self.sample_count = 0
+        self.loss_fn = nn.CrossEntropyLoss()
     
     def forward(self, pred: Tensor, target: Tensor) -> Tensor:
         losses = torch.zeros(self.args.n_classes).to(pred.device)
         
         B, C = tuple(pred.size())
         
+        target_onehot = F.one_hot(target, num_classes=C).float()
+        
         for cidx in range(C):
-            c_pred = pred[target[:, cidx] == 1]
-            c_target = target[target[:, cidx] == 1]
+            c_pred = pred[target_onehot[:, cidx] == 1]
+            c_target = target[target_onehot[:, cidx] == 1]
 
             c_loss = self.loss_fn(c_pred, c_target)
 
