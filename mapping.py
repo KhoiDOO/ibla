@@ -10,7 +10,8 @@ from loss import \
     FocalClassifierV0, FocalSegmenterV0, CBFocalClassifierV0, CBFocalSegmenterV0, \
     BSLClassifierV0, BSLSegmenterV0, \
     GumbelFocalClassifierV0, GumbelFocalSegmenterV0, GumbelSegmenterV0, GumbelClassifierV0, \
-    DWAClassifierV0, DWASegmenterV0, DWASegmenterV1, DWASegmenterV2
+    DWAClassifierV0, DWASegmenterV0, DWASegmenterV1, DWASegmenterV2, \
+    EQLClassifierV0
 
 
 # MODEL
@@ -53,7 +54,8 @@ clf_loss = {
     "bsl" : BSLClassifierV0,
     "gumfocal" : GumbelFocalClassifierV0,
     "gum" : GumbelClassifierV0,
-    "dwa" : DWAClassifierV0
+    "dwa" : DWAClassifierV0,
+    "eq" : EQLClassifierV0
 }
 
 seg_loss = {

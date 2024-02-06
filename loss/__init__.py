@@ -15,3 +15,4 @@ from .gumbel_focal import GumbelFocalClassifierV0, GumbelFocalSegmenterV0
 from .gumbel import GumbelClassifierV0, GumbelSegmenterV0
 
 from .dwa import DWAClassifierV0, DWASegmenterV0, DWASegmenterV1, DWASegmenterV2
+from .eq import EQLClassifierV0
