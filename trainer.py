@@ -22,12 +22,8 @@ def train_func(args):
     # seed setup
     random.seed(args.seed)
     np.random.seed(args.seed)
-    torch.seed(args.seed)
     torch.manual_seed(args.seed)
-    torch.initial_seed(args.seed)
-    torch.cuda.seed(args.seed)
     torch.cuda.manual_seed(args.seed)
-    torch.cuda.initial_seed(args.seed)
     torch.cuda.manual_seed_all(args.seed)
     torch.backends.cudnn.deterministic = True
 
