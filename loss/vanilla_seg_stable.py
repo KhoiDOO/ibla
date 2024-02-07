@@ -14,17 +14,7 @@ class VanillaSegmenterStableV0(VanillaClassifierStableV0):
         entropy = logits * target
 
         return (-1 / (B * H * W)) * torch.sum(entropy)
-
-class BinaryVanillaSegmenterStableV0(BinaryVanillaClassifierStableV0):
-    def __init__(self, args) -> None:
-        super().__init__(args)
-
-    def forward(self, pred, target) -> torch.Tensor:
-        logits = self.act(pred)
-
-        entropy = -(target * logits.clamp(min=1e-12).log() + (1 - target) * (1 - logits).clamp(min=1e-12).log())
-
-        return torch.mean(entropy)
+    
 
 class VanillaSegmenterStableV1(VanillaSegmenterStableV0):
     def __init__(self, args) -> None:

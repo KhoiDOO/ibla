@@ -55,7 +55,6 @@ clf_loss = {
 
 seg_loss = {
     "vanilla" : VanillaSegmenterStableV0,
-    "vanilla_v2" : VanillaSegmenterStableV2,
     "focal" : FocalSegmenterV0,
     "cb" : CBSegmenterV0,
     "cbfocal" : CBFocalSegmenterV0,
