@@ -10,8 +10,7 @@ from loss import \
     FocalClassifierV0, FocalSegmenterV0, CBFocalClassifierV0, CBFocalSegmenterV0, \
     BSLClassifierV0, BSLSegmenterV0, \
     GumbelFocalClassifierV0, GumbelFocalSegmenterV0, GumbelSegmenterV0, GumbelClassifierV0, \
-    CEBCESegmenterStableV2, \
-    UODSegmenterV0
+    CEBCESegmenterStableV2
 
 
 # MODEL
@@ -66,7 +65,6 @@ seg_loss = {
     "gumfocal" : GumbelFocalSegmenterV0,
     "gum" : GumbelSegmenterV0,
     "cebce" : CEBCESegmenterStableV2,
-    "uod" : UODSegmenterV0
 }
 
 
