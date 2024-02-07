@@ -20,14 +20,14 @@ class CBFocalClassifierV0(VanillaClassifierStableV0):
         
         for b_logits, b_target in zip(logits, target):
             target_idx = b_target.item()
-            _b_logits = b_logits[target_idx]
+            entropy = torch.sum(torch.pow(1 - b_logits, self.gamma) * torch.log(b_logits) * b_target)
             if target_idx in cls_loss:
-                cls_loss[target_idx].append(torch.log(_b_logits) * torch.pow(1 - _b_logits, self.gamma))
+                cls_loss[target_idx].append(entropy)
             else:
-                cls_loss[target_idx] = [torch.log(_b_logits) * torch.pow(1 - _b_logits, self.gamma)]
+                cls_loss[target_idx] = [entropy]
         
         sum_cls_loss = {
-            _cls : ((1 - beta)/(1 - beta ** len(cls_loss[_cls] + 1e-6))) * sum(cls_loss[_cls]) for _cls in cls_loss
+            _cls : ((1 - beta)/(1 - beta ** len(cls_loss[_cls]) + 1e-6)) * sum(cls_loss[_cls]) for _cls in cls_loss
         }
 
         return (-1 / B) * sum(list(sum_cls_loss.values()))
