@@ -88,8 +88,12 @@ class Logging:
         self.__run.watch(models=model, log='all', log_freq=self.__args.num_train_batch, log_graph=True)
     
     def log_model(self):
-        self.__run.log_model(path=self.__args.exp_dir + f"/best.pt", model_name=f"{self.__args.run_name}-best-model")
-        self.__run.log_model(path=self.__args.exp_dir + f"/last.pt", model_name=f"{self.__args.run_name}-last-model")
+        best_path = self.__args.exp_dir + f"/best.pt"
+        if os.path.exists(best_path):
+            self.__run.log_model(path=best_path, model_name=f"{self.__args.run_name}-best-model")
+        last_path = self.__args.exp_dir + f"/last.pt"
+        if os.path.exists(last_path):
+            self.__run.log_model(path=last_path, model_name=f"{self.__args.run_name}-last-model")
     
     @property
     def log(self):
