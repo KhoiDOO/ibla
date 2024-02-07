@@ -4,8 +4,7 @@ from model import Unet, SegNet, RUnet, AttUnet, RATTUnet, NestedUNet,\
 from metrics import miou, pixel_accuracy, accuracy, depth_rel_error, depth_abs_error
 
 from loss import \
-    VanillaClassifierStableV0, VanillaSegmenterStableV0, VanillaClassifierStableV1, VanillaClassifierStableV2, \
-    VanillaSegmenterStableV1, VanillaSegmenterStableV2, \
+    VanillaClassifierStableV0, VanillaSegmenterStableV0, VanillaClassifierStableV1, VanillaClassifierStableV2, VanillaSegmenterStableV1, VanillaSegmenterStableV2, \
     CBClassifierV0, CBSegmenterV0, \
     FocalClassifierV0, FocalSegmenterV0, CBFocalClassifierV0, CBFocalSegmenterV0, \
     BSLClassifierV0, BSLSegmenterV0, \
