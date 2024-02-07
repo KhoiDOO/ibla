@@ -1,4 +1,4 @@
-from .vanilla_clf_stable import VanillaClassifierStableV0, BinaryVanillaClassifierStableV0
+from .vanilla_clf_stable import VanillaClassifierStableV0
 import torch
 from torch import nn
 
