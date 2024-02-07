@@ -30,6 +30,8 @@ if __name__ == "__main__":
     # TRAINING GENERAL SETTINGS
     parser.add_argument('--idx', type=int, default=0,
         help='device index used in training')
+    parser.add_argument('--seed', type=int, default=0,
+        help='seed used in training')
     parser.add_argument('--model', type=str, default='unet', choices=[
         'unet', 'segnet', 'runet', 'attunet', 'rattunet', 'nestunet',
         'resnet18', 'base', 'resnet18_scratch'],
