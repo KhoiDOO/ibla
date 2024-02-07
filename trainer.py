@@ -26,16 +26,7 @@ def train_func(args):
 
     # dataset setup
     data, args = get_ds(args)
-    train_ds, valid_ds, test_ds, train_dl, valid_dl, test_dl = data
-
-    if args.verbose:
-        print(f"Number Training Samples: {len(train_ds)}")
-        print(f"Number Validating Samples: {len(valid_ds)}")
-        print(f"Number Testing Samples: {len(test_ds)}")
-
-        print(f"Number Training Batchs: {len(train_dl)}")
-        print(f"Number Validating Batchs: {len(valid_dl)}")
-        print(f"Number Testing Batchs: {len(test_dl)}")
+    _, _, _, train_dl, valid_dl, test_dl = data
 
     # logging setup
     log_interface = Logging(args)
@@ -63,20 +54,14 @@ def train_func(args):
         log_interface.watch(model)
 
     # training
-    if args.verbose:
-        print("Training")
     old_valid_loss = 1e26
-    epoch_prog = range(args.epochs) if args.verbose else track(range(args.epochs))
 
-    for epoch in epoch_prog:
+    for epoch in track(range(args.epochs)):
         args.epoch = epoch
-        if args.verbose:
-            print(f"Epoch: {epoch}")
         
         # train data loader
         model.train()
-        train_prog = track(enumerate(train_dl)) if args.verbose else enumerate(train_dl)
-        for batch, (img, target) in train_prog:
+        for _, (img, target) in enumerate(train_dl):
             img = img.to(device)
             target = target.to(device)
 
@@ -95,10 +80,9 @@ def train_func(args):
             scheduler.step()
 
         # valid data loader 
-        valid_prog = track(enumerate(valid_dl)) if args.verbose else enumerate(valid_dl)
         model.eval()
         with torch.no_grad():
-            for batch, (img, target) in valid_prog:
+            for _, (img, target) in enumerate(valid_dl):
                 img = img.to(device)
                 target = target.to(device)
 
@@ -130,18 +114,14 @@ def train_func(args):
         
         save_path = args.exp_dir + f"/last.pt"
         torch.save(save_dict, save_path)
-
-        if args.loss == 'dwa':
-            train_loss_fn.train_loss_buffer
     
+    # save model
+    log_interface.log_model()
     
     log_interface.reset()
-    if args.verbose:
-        print("Validating")
-    test_prog = track(enumerate(test_dl)) if args.verbose else enumerate(test_dl)
     model.eval()
     with torch.no_grad():
-        for batch, (img, target) in test_prog:
+        for _, (img, target) in enumerate(test_dl):
             img = img.to(device)
             target = target.to(device)
 
@@ -153,6 +133,4 @@ def train_func(args):
             for metric_key in metric_dict:
                 metric_value = metric_dict[metric_key](pred, target)
                 log_interface(key=f"test/{metric_key}", value=metric_value)
-
-    if args.verbose:
-        print("Ending")
+    log_interface.step(0)

@@ -87,6 +87,10 @@ class Logging:
     def watch(self, model):
         self.__run.watch(models=model, log='all', log_freq=self.__args.num_train_batch, log_graph=True)
     
+    def log_model(self):
+        self.__run.log_model(path=self.__args.exp_dir + f"/best.pt", model_name=f"{self.__args.run_name}-best-model")
+        self.__run.log_model(path=self.__args.exp_dir + f"/last.pt", model_name=f"{self.__args.run_name}-last-model")
+    
     @property
     def log(self):
         return self._Logging__log
@@ -98,3 +102,7 @@ class Logging:
     @property
     def epoch(self):
         return self._Logging__epoch
+
+    @property
+    def args(self):
+        return self._Logging__args

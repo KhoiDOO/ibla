@@ -54,8 +54,6 @@ if __name__ == "__main__":
         help='toggle to use wandb for online saving')
     parser.add_argument('--wandb_entity', type=str, default="scalemind",
         help='toggle to use wandb for online saving')
-    parser.add_argument('--verbose', action='store_true',
-        help='toggle to use print information during training')
 
     # MODEL
     parser.add_argument('--init_ch', type=int, default=32,
