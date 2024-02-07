@@ -10,11 +10,11 @@ class FocalClassifierV0(VanillaClassifierStableV0):
     
     def forward(self, pred, target) -> torch.Tensor:
 
-        logits = self.act(pred)
+        logits = F.softmax(pred, dim=1)
 
         B, C = tuple(logits.size())
 
-        entropy = torch.pow(1 - logits, self.gamma) * logits * F.one_hot(target, num_classes=C).float()
+        entropy = torch.pow(1 - logits, self.gamma) * torch.log(logits) * F.one_hot(target, num_classes=C).float()
 
         return (-1 / B) * torch.sum(entropy)
 
@@ -25,10 +25,10 @@ class FocalSegmenterV0(VanillaClassifierStableV0):
         self.gamma = args.gamma
 
     def forward(self, pred, target) -> torch.Tensor:
-        logits = self.act(pred)
+        logits = F.softmax(pred, dim=1)
 
         B, C, H, W = tuple(logits.size())
 
-        entropy = torch.pow(1 - logits, self.gamma) * logits * target
+        entropy = torch.pow(1 - logits, self.gamma) * torch.log(logits) * target
 
         return (-1 / (B * H * W)) * torch.sum(entropy)
