@@ -7,3 +7,4 @@ scipy==1.11.4
 tensorboard==2.15.1
 wandb==0.16.0
 matplotlib==3.8.2
+seaborn==0.13.2
