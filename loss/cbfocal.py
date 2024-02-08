@@ -1,10 +1,10 @@
-from .vanilla_clf_stable import VanillaClassifierStableV0
 import torch
+from torch import nn
 import torch.nn.functional as F
 
-class CBFocalClassifierV0(VanillaClassifierStableV0):
+class CBFocalClassifierV0(nn.Module):
     def __init__(self, args) -> None:
-        super().__init__(args)
+        super(CBFocalClassifierV0, self).__init__()
         
         self.gamma = args.gamma
     
@@ -12,7 +12,7 @@ class CBFocalClassifierV0(VanillaClassifierStableV0):
 
         cls_loss = {}
 
-        logits = F.softmax(pred, dim=1)
+        logits = F.log_softmax(pred, dim=1)
 
         B = list(target.size())[0]
         
@@ -20,7 +20,7 @@ class CBFocalClassifierV0(VanillaClassifierStableV0):
         
         for b_logits, b_target in zip(logits, target):
             target_idx = b_target.item()
-            entropy = torch.sum(torch.pow(1 - b_logits, self.gamma) * torch.log(b_logits) * b_target)
+            entropy = torch.sum(torch.pow(1 - b_logits.exp(), self.gamma) * b_logits * b_target)
             if target_idx in cls_loss:
                 cls_loss[target_idx].append(entropy)
             else:
@@ -32,9 +32,9 @@ class CBFocalClassifierV0(VanillaClassifierStableV0):
 
         return (-1 / B) * sum(list(sum_cls_loss.values()))
 
-class CBFocalSegmenterV0(VanillaClassifierStableV0):
+class CBFocalSegmenterV0(nn.Module):
     def __init__(self, args) -> None:
-        super().__init__(args)
+        super(CBFocalSegmenterV0, self).__init__()
         
         self.gamma = args.gamma
         
@@ -42,7 +42,7 @@ class CBFocalSegmenterV0(VanillaClassifierStableV0):
 
         cls_loss = {}
 
-        logits = F.softmax(pred, dim=1)
+        logits = F.log_softmax(pred, dim=1)
 
         B, C, H, W = tuple(logits.size())
 
@@ -59,7 +59,7 @@ class CBFocalSegmenterV0(VanillaClassifierStableV0):
             
             N_c, _ = tuple(c_target.shape)
 
-            entropy = ((1 - beta)/(1 - beta ** N_c + 1e-6)) * torch.sum(torch.pow(1 - c_logits, self.gamma) * torch.log(c_logits) * c_target)
+            entropy = ((1 - beta)/(1 - beta ** N_c + 1e-6)) * torch.sum(torch.pow(1 - c_logits.exp(), self.gamma) * c_logits * c_target)
 
             cls_loss[cidx] = entropy
 
