@@ -36,7 +36,7 @@ def train_func(args):
 
     # dataset setup
     data, args = get_ds(args)
-    _, _, _, train_dl, valid_dl, test_dl = data
+    _, _, _, train_dl, valid_dl, _ = data
 
     # logging setup
     log_interface = Logging(args)
@@ -85,7 +85,10 @@ def train_func(args):
                 log_interface(key=f"train/{metric_key}", value=metric_value)
             
             optimizer.zero_grad()
-            loss.backward()
+            if args.loss == 'cag':
+                train_loss_fn.backward(list(model.parameters()))
+            else:
+                loss.backward()
             optimizer.step()
             scheduler.step()
 
