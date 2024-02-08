@@ -1,34 +1,36 @@
-from .vanilla_clf_stable import VanillaClassifierStableV0
 import torch
+from torch import nn
 import torch.nn.functional as F
 
-class FocalClassifierV0(VanillaClassifierStableV0):
+class FocalClassifierV0(nn.Module):
     def __init__(self, args) -> None:
-        super().__init__(args)
+        super(FocalClassifierV0, self).__init__()
         
         self.gamma = args.gamma
     
     def forward(self, pred, target) -> torch.Tensor:
 
-        logits = F.softmax(pred, dim=1)
+        logits = F.log_softmax(pred, dim=1)
 
         B, C = tuple(logits.size())
 
-        entropy = torch.pow(1 - logits, self.gamma) * torch.log(logits) * F.one_hot(target, num_classes=C).float()
+        entropy = torch.pow(1 - logits.exp(), self.gamma) * logits * F.one_hot(target, num_classes=C).float()
 
-        return (-1 / B) * torch.sum(entropy)
+        loss = (-1) * entropy.mean()
 
-class FocalSegmenterV0(VanillaClassifierStableV0):
+        return loss
+
+class FocalSegmenterV0(nn.Module):
     def __init__(self, args) -> None:
-        super().__init__(args)
+        super(FocalSegmenterV0, self).__init__()
         
         self.gamma = args.gamma
 
     def forward(self, pred, target) -> torch.Tensor:
-        logits = F.softmax(pred, dim=1)
+        logits = F.log_softmax(pred, dim=1)
 
-        B, C, H, W = tuple(logits.size())
+        entropy = torch.pow(1 - logits.exp(), self.gamma) * logits * target
 
-        entropy = torch.pow(1 - logits, self.gamma) * torch.log(logits) * target
+        loss = (-1) * entropy.mean()
 
-        return (-1 / (B * H * W)) * torch.sum(entropy)
+        return loss
