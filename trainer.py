@@ -127,20 +127,3 @@ def train_func(args):
     
     # save model
     log_interface.log_model()
-    
-    log_interface.reset()
-    model.eval()
-    with torch.no_grad():
-        for _, (img, target) in enumerate(test_dl):
-            img = img.to(device)
-            target = target.to(device)
-
-            pred = model(img)
-            loss = eval_loss_fn(pred, target)
-
-            log_interface(key="test/loss", value=loss.item())
-
-            for metric_key in metric_dict:
-                metric_value = metric_dict[metric_key](pred, target)
-                log_interface(key=f"test/{metric_key}", value=metric_value)
-    log_interface.step(0)
