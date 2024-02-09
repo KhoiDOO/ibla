@@ -72,9 +72,9 @@ class CustomCityScapeDS(Dataset):
             self.transform = transforms.Compose([transforms.Resize((256, 512)), transforms.ToTensor()])
         
         if sematic_transform:
-            self.target_transform['semantic'] = sematic_transform
+            self.target_transform['seg'] = sematic_transform
         else:
-            self.target_transform['semantic'] = transforms.Compose(
+            self.target_transform['seg'] = transforms.Compose(
                 [transforms.Resize((256, 512)), transforms.PILToTensor(), self.make_semantic_class])
 
         self.root = "/media/mountHDD2/cityscapes" if not root else root
@@ -110,7 +110,7 @@ class CustomCityScapeDS(Dataset):
 
                 self.targets.append(
                     {
-                        "semantic" : os.path.join(semantic_target_dir, f"{fn}_{mode_folder}_labelIds.png"),
+                        "seg" : os.path.join(semantic_target_dir, f"{fn}_{mode_folder}_labelIds.png"),
                         "depth" : os.path.join(depth_target_dir, f"{fn}_disparity.png"),
                     }
                 )
@@ -121,9 +121,8 @@ class CustomCityScapeDS(Dataset):
         encx = torch.zeros(x.shape, dtype=torch.long)
         for label in self.semantic_map:
             encx[x == label] = self.semantic_map[label][1]
-        print(encx.shape)
         onehot = F.one_hot(encx.squeeze(1), 20).permute(0, 3, 1, 2)[0].float()
-        return onehot[:-1]
+        return onehot
 
     @staticmethod
     def process_depth(x):
@@ -145,8 +144,8 @@ class CustomCityScapeDS(Dataset):
     def __getitem__(self, idx):
         img = self.transform(Image.open(self.images[idx]).convert("RGB"))
 
-        if self.args.task == 'semantic':
-            target = self.target_transform['semantic'](Image.open(self.targets[idx]['semantic']))
+        if self.args.task == 'seg':
+            target = self.target_transform['seg'](Image.open(self.targets[idx]['seg']))
         elif self.args.task == 'depth':
             target = self.process_depth(self.targets[idx]['depth'])
         else:
