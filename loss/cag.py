@@ -101,10 +101,14 @@ class CAGSegmenterV0(nn.Module):
         _target = target.permute(0, 2, 3, 1).flatten(0, -2)
 
         for cidx in range(C):
-            c_pred = _preds[_target[:, cidx] == 1]
-            c_target = _target[_target[:, cidx] == 1]
+            target_bool = _target[:, cidx] == 1
+            if target_bool.sum() != 0:
+                c_pred = _preds[target_bool]
+                c_target = _target[target_bool]
 
-            c_loss = self.loss_fn(c_pred, c_target)
+                c_loss = self.loss_fn(c_pred, c_target)
+            else:
+                c_loss = F.binary_cross_entropy_with_logits(input = pred[:, cidx, :, :], target = target[:, cidx, :, :])
 
             self.losses[cidx] = c_loss
 
