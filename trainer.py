@@ -87,8 +87,6 @@ def train_func(args):
                 loss.backward()
             optimizer.step()
             scheduler.step()
-        
-        print(loss)
 
         # valid data loader 
         model.eval()
