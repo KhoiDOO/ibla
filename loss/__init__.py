@@ -12,3 +12,4 @@ from .gumbel_focal import GumbelFocalClassifierV0, GumbelFocalSegmenterV0
 from .gumbel import GumbelClassifierV0, GumbelSegmenterV0
 
 from .cag import CAGSegmenterV0
+from .na import NaClassifierV0, NaSegmenterV0

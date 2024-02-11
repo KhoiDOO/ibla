@@ -37,7 +37,7 @@ if __name__ == "__main__":
         'resnet18', 'base', 'resnet18_scratch'],
         help='backbone used in training')
     parser.add_argument('--loss', type=str, default='vanilla', 
-        choices=['vanilla', 'focal', 'cb', 'cbfocal', 'bsl', 'gumfocal', 'gum', 'cag'],
+        choices=['vanilla', 'focal', 'cb', 'cbfocal', 'bsl', 'gumfocal', 'gum', 'cag', 'na'],
         help='loss function used in training')
     parser.add_argument('--task', type=str, default='clf', required=True,
         choices=['clf', 'seg'],
@@ -76,6 +76,10 @@ if __name__ == "__main__":
     # CAG
     parser.add_argument('--cagrad_c', type=float, default=0.5,
         help='scale parameter in cag loss')
+
+    # NA
+    parser.add_argument('--na_alpha', type=float, default=-0.5,
+        help='temp in noise adaptive loss')
 
 
     args = parser.parse_args()
