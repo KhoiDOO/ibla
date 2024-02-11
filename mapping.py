@@ -10,7 +10,8 @@ from loss import \
     BSLClassifierV0, BSLSegmenterV0, \
     GumbelFocalClassifierV0, GumbelFocalSegmenterV0, GumbelSegmenterV0, GumbelClassifierV0, \
     CAGSegmenterV0, \
-    NaClassifierV0, NaSegmenterV0
+    NaClassifierV0, NaSegmenterV0, \
+    INASegmenterV0
 
 
 # MODEL
@@ -65,7 +66,8 @@ seg_loss = {
     "gumfocal" : GumbelFocalSegmenterV0,
     "gum" : GumbelSegmenterV0,
     "cag" : CAGSegmenterV0,
-    "na" : NaSegmenterV0
+    "na" : NaSegmenterV0,
+    "ina" : INASegmenterV0
 }
 
 
