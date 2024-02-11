@@ -71,7 +71,7 @@ def get_ds_nyu(args):
     valid_dl = DataLoader(valid_ds, batch_size=args.bs, shuffle=True, pin_memory=args.pinmem, num_workers=args.wk)
     test_dl = DataLoader(test_ds, batch_size=args.bs, shuffle=True, pin_memory=args.pinmem, num_workers=args.wk)
 
-    args.seg_n_classes = 3
+    args.seg_n_classes = 14
 
     args.num_train_sample = len(train_ds)
     args.num_valid_sample = len(valid_ds)

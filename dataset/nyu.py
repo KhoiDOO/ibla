@@ -48,8 +48,8 @@ class NYUv2(Dataset):
         nor_path = self.nor_paths[idx]
 
         img = np.load(img_path)
-        img_torch = torch.from_numpy(img).permute(-1, 0, 1)
-        if self.args.task == 'semantic':
+        img_torch = torch.from_numpy(img).permute(-1, 0, 1).float()
+        if self.args.task == 'seg':
             msk = np.load(msk_path)
             msk_torch = torch.from_numpy(msk + 1).long()
             msk_onehot = self.make_semantic_class(msk_torch)

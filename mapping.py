@@ -88,6 +88,13 @@ mapping = {
             'loss' : seg_loss
         }
     },
+    'nyu' : {
+        'seg' : {
+            'model' : enc_dec_mapping,
+            'metrics' : seg_metrics_mapping,
+            'loss' : seg_loss
+        }
+    },
     'vocalfolds' : {
         'seg' : {
             'model' : enc_dec_mapping,
