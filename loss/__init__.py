@@ -16,3 +16,5 @@ from .na import NaClassifierV0, NaSegmenterV0
 from .ina import INASegmenterV0
 
 from .ldam import LDAMSegmenterV0
+
+from .blv import BLVSegmenterV0

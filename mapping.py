@@ -12,7 +12,8 @@ from loss import \
     CAGSegmenterV0, \
     NaClassifierV0, NaSegmenterV0, \
     INASegmenterV0, \
-    LDAMSegmenterV0
+    LDAMSegmenterV0, \
+    BLVSegmenterV0
 
 
 # MODEL
@@ -69,7 +70,8 @@ seg_loss = {
     "cag" : CAGSegmenterV0,
     "na" : NaSegmenterV0,
     "ina" : INASegmenterV0,
-    "ldam" : LDAMSegmenterV0
+    "ldam" : LDAMSegmenterV0,
+    "blv" : BLVSegmenterV0
 }
 
 
