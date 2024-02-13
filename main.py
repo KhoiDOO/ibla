@@ -37,7 +37,7 @@ if __name__ == "__main__":
         'resnet18', 'base', 'resnet18_scratch'],
         help='backbone used in training')
     parser.add_argument('--loss', type=str, default='vanilla', 
-        choices=['vanilla', 'focal', 'cb', 'cbfocal', 'bsl', 'gumfocal', 'gum', 'cag', 'na', 'ina'],
+        choices=['vanilla', 'focal', 'cb', 'cbfocal', 'bsl', 'gumfocal', 'gum', 'cag', 'na', 'ina', 'ldam'],
         help='loss function used in training')
     parser.add_argument('--task', type=str, default='clf', required=True,
         choices=['clf', 'seg'],
@@ -80,6 +80,12 @@ if __name__ == "__main__":
     # NA
     parser.add_argument('--na_alpha', type=float, default=-0.5,
         help='temp in noise adaptive loss')
+    
+    # LDAM
+    parser.add_argument('--ldam_max_m', type=float, default=0.5,
+        help='max_m param')
+    parser.add_argument('--ldam_s', type=float, default=30,
+        help='scale param')
 
 
     args = parser.parse_args()
