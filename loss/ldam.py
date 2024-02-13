@@ -12,7 +12,7 @@ class LDAMSegmenterV0(nn.Module):
         self.s = args.ldam_s
 
     def forward(self, pred, target) -> torch.Tensor:
-        m_list = torch.sum(target, dim=[0, 2, 3])
+        m_list = torch.sum(target, dim=[0, 2, 3]) + 0.0001
         m_list = 1.0 / torch.sqrt(torch.sqrt(m_list))
         m_list = m_list * (self.max_m / torch.max(m_list))
 
