@@ -11,7 +11,7 @@ from loss import \
     GumbelFocalClassifierV0, GumbelFocalSegmenterV0, GumbelSegmenterV0, GumbelClassifierV0, \
     CAGSegmenterV0, \
     NaClassifierV0, NaSegmenterV0, \
-    INASegmenterV0, \
+    INASegmenterV0, INAPSegmenterV0, \
     LDAMSegmenterV0, \
     BLVSegmenterV0
 
@@ -71,7 +71,8 @@ seg_loss = {
     "na" : NaSegmenterV0,
     "ina" : INASegmenterV0,
     "ldam" : LDAMSegmenterV0,
-    "blv" : BLVSegmenterV0
+    "blv" : BLVSegmenterV0,
+    "inap" : INAPSegmenterV0
 }
 
 

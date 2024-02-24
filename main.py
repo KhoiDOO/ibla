@@ -37,7 +37,7 @@ if __name__ == "__main__":
         'resnet18', 'base', 'resnet18_scratch'],
         help='backbone used in training')
     parser.add_argument('--loss', type=str, default='vanilla', 
-        choices=['vanilla', 'focal', 'cb', 'cbfocal', 'bsl', 'gumfocal', 'gum', 'cag', 'na', 'ina', 'ldam', 'blv'],
+        choices=['vanilla', 'focal', 'cb', 'cbfocal', 'bsl', 'gumfocal', 'gum', 'cag', 'na', 'ina', 'ldam', 'blv', 'inap'],
         help='loss function used in training')
     parser.add_argument('--task', type=str, default='clf', required=True,
         choices=['clf', 'seg'],
