@@ -1,4 +1,5 @@
 # IBLA - Imbalance Learning Archive
+:bell::bell::bell: This project is shutdown owing to a very bad coding architecture, the new version of this project will be release soon.
 
 # Setup
 ## Environment
